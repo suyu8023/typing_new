@@ -3,7 +3,6 @@
 import React from 'react'
 import { Table, Divider, Tag, Pagination, Modal, Button } from 'antd'
 import { connect } from 'dva'
-import MainLayout from '../mainlayout/index'
 import router from 'umi/router';
 import { Chart, Geom, Axis, Tooltip } from "bizcharts";
 
@@ -27,7 +26,7 @@ class Index extends React.Component {
                 visible: true,
                 data: []
             });
-         }
+        }
         else {
             item = item.replace(/x/g, '"x"')
             item = item.replace(/y/g, '"y"')
@@ -136,7 +135,7 @@ class Index extends React.Component {
             }
         };
         return (
-            <MainLayout {...this.props}>
+            <div>
                 <div>
                     <Table
                         pagination={false}
@@ -195,7 +194,7 @@ class Index extends React.Component {
                         />
                     </Chart>
                 </Modal>
-            </MainLayout>
+            </div>
         )
     }
 }

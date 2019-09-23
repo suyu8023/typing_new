@@ -3,7 +3,6 @@
 import React from 'react'
 import { Table, Divider, Tag, Pagination } from 'antd'
 import { connect } from 'dva'
-import MainLayout from '../mainlayout/index'
 import router from 'umi/router';
 
 const columns = [
@@ -60,11 +59,11 @@ class Index extends React.Component {
         if (reg.test([path[2]])) {
             page = parseInt(path[2]);
         }
-        if(MessageList === undefined || MessageList.length === 0){
+        if (MessageList === undefined || MessageList.length === 0) {
             num = 0;
         }
         return (
-            <MainLayout {...this.props}>
+            <div>
                 <div>
                     <Table
                         pagination={false}
@@ -82,7 +81,7 @@ class Index extends React.Component {
                         />
                     </div>
                 </div>
-            </MainLayout>
+            </div>
         )
     }
 }
