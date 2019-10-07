@@ -35,7 +35,7 @@ class Index extends React.Component {
                         </Menu.Item>
                     </Menu>
                 </Header>
-                <Content style={{ padding: '0 50px' }}>
+                <Content style={{ padding: '0 50px' }} id='content'>
                     <Breadcrumb style={{ margin: '16px 0' }}>
                     </Breadcrumb>
                     <div style={{ background: '#fff', padding: 24, height: '100%' }}>

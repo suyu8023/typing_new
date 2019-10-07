@@ -1,25 +1,40 @@
 import React from "react";
 // import axios from "axios";
 import CSS from "./mid.css";
+import { connect } from 'dva'
 import { List } from 'react-virtualized';
 
+let hei = 0;
+let flag = -1;
+let counttime = false;
+let true_num = 0;
+let wrong_num = 0;
+let num = 0;
+let wrong_num1;
+let true_num1;
+let true_num2 = 0;
+let back_num = 0;
+let backFlag = true;
+let qtime = 0;
 function handleClick(e) {
   e.preventDefault();
 }
+
 
 class List1 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       value: this.props.list,
-      maxlen: 0
+      maxlen: 0,
+      wrong_num: 0,
+      true_num: 0,
     };
   }
 
   input = null;
 
   barkTwice = () => {
-    // console.log(this.input)
     if (this.input == null) {
       console.log("++++++")
     }
@@ -27,9 +42,16 @@ class List1 extends React.Component {
   };
 
   oninput = e => {
-    console.log(document.getElementById("qw").scrollTop)
-    document.getElementById("read10").scrollTop = 20
+    if (counttime === false) {
+      this.props.countTime();
+      counttime = true;
+    }
     let i = parseInt(e.target.id.slice(4));
+    if (i >= 3 && flag != i) {
+      document.getElementById("qw").scrollTop = hei + 86;
+      hei += 86;
+      flag = i;
+    }
     let value = e.target.value;
     let j = parseInt(e.target.value.length);
     let max = Math.max(j, this.state.maxlen);
@@ -37,33 +59,44 @@ class List1 extends React.Component {
       maxlen: max
     })
     if (
-      j > 0 && j < this.state.value.length + 1 &&
-      value[j - 1] !== this.state.value[j - 1].value
+      j >= 0 && j < this.state.value.length + 1
     ) {
-      let date = this.state.value;
-      date[j - 1].color = "red";
+      wrong_num1 = 0;
+      true_num1 = 0;
+      let data = this.state.value;
+      for (let k = 0; k < data.length; k++) {
+        if (j > k) {
+          if (value[k] === data[k].value) {
+            data[k].color = 'green';
+            true_num1++;
+          }
+          else {
+            data[k].color = 'red';
+            wrong_num1++;
+          }
+        }
+        else {
+          data[k].color = '';
+        }
+      }
+      true_num2 = true_num + true_num1;
+      document.getElementById('num').innerText = num + true_num1 + wrong_num1;
+      document.getElementById('true_num').innerText = true_num + true_num1;
+      document.getElementById('wrong_num').innerText = wrong_num + wrong_num1;
+
       this.setState({
-        value: date
-      });
-    } else if (
-      j > 0 && j < this.state.value.length + 1 &&
-      value[j - 1] === this.state.value[j - 1].value
-    ) {
-      let date = this.state.value;
-      date[j - 1].color = "green";
-      this.setState({
-        date: date
-      });
-    }
-    if (j < max) {
-      let date = this.state.value;
-      date[j].color = "black";
-      this.setState({
-        value: date
+        value: data,
       });
     }
     if (j === this.state.value.length + 1 && value[j - 1] === " ") {
       const nextIndex = i + 1;
+      num += true_num1 + wrong_num1;
+      true_num2 = true_num + true_num1;
+      true_num += true_num1;
+      wrong_num += wrong_num1;
+      document.getElementById('num').innerText = num;
+      document.getElementById('true_num').innerText = true_num + true_num1;
+      document.getElementById('wrong_num').innerText = wrong_num + wrong_num1;
       this.props.bark(nextIndex);
     }
   };
@@ -80,7 +113,7 @@ class List1 extends React.Component {
         <div className={CSS.write} id={"show" + index}>
           {this.state.value.map((item) => {
             return (
-              <span key={item.index} style={{ color: item.color }}>
+              <span key={item.index} style={{ backgroundColor: item.color }}>
                 {item.value}
               </span>
             );
@@ -106,11 +139,20 @@ class ShowMessage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeIndex: 0
+      activeIndex: 0,
     };
   }
 
   list = [];
+
+  countTime = () => {
+    qtime++;
+    if (document.getElementById('time') != null && document.getElementById('speed') != null) {
+      document.getElementById('time').innerText = (Array(2).join('0') + Math.floor(qtime / 60)).slice(-2) + ':' + (Array(2).join('0') + Math.floor(qtime % 60)).slice(-2);
+      document.getElementById('speed').innerText = (true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60)) * 60).toFixed(2) + 'KPM';
+      setTimeout(this.countTime, 1000);
+    }
+  }
 
   bark = index => {
     this.setState(
@@ -130,31 +172,31 @@ class ShowMessage extends React.Component {
     let date = this.props.date;
     let input = this.props.in;
     return (
-      <div id='qw' style={{height: 500, overflow: 'hidden'}}>
-        {date.map((item, index) => {
-          return (
-            <List1
-              key={index}
-              id={"qaq" + item.mid}
-              list={item}
-              index={index}
-              in={input}
-              activeIndex={this.state.activeIndex}
-              bark={this.bark}
-              ref={ref => (this.list[index] = ref)}
-            />
-          );
-        })}
-      </div>
-      // <List
-      //   width={300}
-      //   height={300}
-      //   rowCount={this.props.date.length}
-      //   rowHeight={20}
-      //   rowRenderer={List1}
-      //   >
+      <div>
+        <span style={{ fontSize: 30 }}>时间: <span id='time' style={{ color: 'red' }}>00:00</span></span>
+        <span style={{ fontSize: 30 }}> 速度:<span id='speed'>0KPM</span></span>
+        <span style={{ fontSize: 30 }}> 打字总数:<span id='num'>0</span></span>
+        <span style={{ fontSize: 30 }}> 正确字数:<span id='true_num'>0</span></span>
+        <span style={{ fontSize: 30 }}> 错误字数:<span id='wrong_num'>0</span></span>
 
-      // </List>
+        <div id='qw' style={{ height: 680, overflow: 'hidden' }}>
+          {date.map((item, index) => {
+            return (
+              <List1
+                key={index}
+                id={"qaq" + item.mid}
+                list={item}
+                index={index}
+                in={input}
+                activeIndex={this.state.activeIndex}
+                bark={this.bark}
+                ref={ref => (this.list[index] = ref)}
+                countTime={this.countTime}
+              />
+            );
+          })}
+        </div>
+      </div>
     );
   }
 }
@@ -167,112 +209,59 @@ class Detail extends React.Component {
     };
   }
 
-  componentDidMount() {
-    let mid = this.props.match.params.mid;
-
-    // axios.get("/api/message/" + mid).then(
-    //   response => {
-    let date = `Scars To Your Beautiful - Alessia Cara
-        She just wants to be beautiful
-        She goes unnoticed she knows no limits
-        She craves attention she praises an image
-        She prays to be sculpted by the sculptor
-        Oh she don't see the light that's shining
-        Deeper than the eyes can find it
-        Maybe we have made her blind
-        So she tries to cover up her pain and cut her woes away
-        Cause covergirls don't cry after their face is made
-        But there's a hope that's waiting for you in the dark
-        You should know you're beautiful just the way you are
-        And you don't have to change a thing
-        The world could change its heart
-        No scars to your beautiful we're stars and we're beautiful
-        Oh
-        And you don't have to change a thing
-        The world could change its heart
-        No scars to your beautiful we're stars and we're beautiful
-        She has dreams to be an envy so she's starving
-        You know covergirls eat nothing
-        She says beauty is pain and there's beauty in everything
-        What's a little bit of hunger
-        I could go a little while longer she fades away
-        She don't see her perfect she don't understand she's worth it
-        Or that beauty goes deeper than the surface
-        So to all the girls that's hurting
-        Let me be your mirror help you see a little bit clearer
-        The light that shines within
-        There's a hope that's waiting for you in the dark
-        You should know you're beautiful just the way you are
-        And you don't have to change a thing
-        The world could change its heart
-        No scars to your beautiful we're stars and we're beautiful
-        And you don't have to change a thing
-        The world could change its heart
-        No scars to your beautiful we're stars and we're beautiful
-        No better you than the you that you are
-        No better you than the you that you are
-        No better life than the life we're living
-        No better life than the life we're living
-        No better time for your shine you're a star
-        No better time for your shine you're a star
-        Oh you're beautiful oh you're beautiful
-        There's a hope that's waiting for you in the dark
-        You should know you're beautiful just the way you are
-        And you don't have to change a thing
-        The world could change its heart
-        No scars to your beautiful we're stars and we're beautiful
-        And you don't have to change a thing
-        The world could change its heart
-        No scars to your beautiful we're stars and we're beautiful`;
-    date = date.replace(/\n/g, " ");
-    date = date.split(/\s+/);
-    let date1 = [];
-    let str = "";
-    for (let i = 0; i < date.length; i++) {
-      if (i % 20 === 0 && i !== 0) {
-        date1.push(str);
-        str = date[i];
-      } else {
-        if (i === 0) {
-          str = str + date[i];
+  render() {
+    let date3 = [];
+    const { Message } = this.props;
+    let date = Message;
+    if (Message != undefined) {
+      date = date.replace(/\n/g, " ");
+      date = date.split(/\s+/);
+      let date1 = [];
+      let str = "";
+      for (let i = 0; i < date.length; i++) {
+        if (i % 20 === 0 && i !== 0) {
+          date1.push(str);
+          str = date[i];
         } else {
-          str += " " + date[i];
+          if (i === 0) {
+            str = str + date[i];
+          } else {
+            str += " " + date[i];
+          }
         }
       }
-    }
-    date1.push(str);
-
-    let date3 = [];
-    let xx = 0;
-    for (let i = 0; i < date1.length; i++) {
-      let date2 = [];
-      for (let j = 0; j < date1[i].length; j++) {
-        let s = {};
-        s.index = xx++;
-        s.color = "black";
-        s.value = date1[i][j];
-        date2.push(s);
+      date1.push(str);
+      date3 = [];
+      let xx = 0;
+      for (let i = 0; i < date1.length; i++) {
+        let date2 = [];
+        for (let j = 0; j < date1[i].length; j++) {
+          let s = {};
+          s.index = xx++;
+          s.color = "";
+          s.value = date1[i][j];
+          date2.push(s);
+        }
+        date3.push(date2);
       }
-      date3.push(date2);
     }
-    this.setState(
-      {
-        date1: date3
-      },
-      () => {
-      }
-    );
-  }
-
-  render() {
     return (
       <div>
         <ShowMessage
-          date={this.state.date1}
+          {...this.props}
+          date={date3}
         />
       </div>
     );
   }
 }
 
-export default Detail;
+function mapStateToProps(state) {
+  const { Message } = state.mid
+  return {
+    loading: state.loading.models.mid,
+    Message
+  }
+}
+
+export default connect(mapStateToProps)(Detail);

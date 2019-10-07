@@ -4,13 +4,14 @@ import React from 'react'
 import { Table, Divider, Tag, Pagination } from 'antd'
 import { connect } from 'dva'
 import router from 'umi/router';
+import Link from 'umi/link';
 
 const columns = [
     {
         title: 'ID',
         dataIndex: 'mid',
         key: 'mid',
-        // render: text => <a>{text}</a>,
+        render: text => <Link to={'/practice/message/' + text}>{text}</Link>,
     },
     {
         title: '标题',
