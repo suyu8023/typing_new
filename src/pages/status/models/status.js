@@ -47,7 +47,7 @@ export default {
         let list = pathname.split('/');
         if (list.length === 3){
           let reg = /^\d+$/;
-          console.log(pathname)
+          // console.log(pathname)
           if (reg.test(list[2])&&list[1] === 'status'){
             dispatch({ type: 'getStatusNum' })
             dispatch({ type: 'getStatusList', payload: {

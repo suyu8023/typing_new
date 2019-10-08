@@ -46,6 +46,7 @@ export default {
       return history.listen(({ pathname, query }) => {
         let list = pathname.split('/');
         if (list.length === 3){
+          // console.log("qwqwqwqw");
           let reg = /^\d+$/;
           if (reg.test(list[2])&&list[1] === 'contest'){
             dispatch({ type: 'getContestNum' })

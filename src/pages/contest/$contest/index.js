@@ -4,6 +4,7 @@ import React from 'react'
 import { Table, Divider, Tag, Pagination } from 'antd'
 import { connect } from 'dva'
 import router from 'umi/router';
+import Link from 'umi/link';
 
 const columns = [
     {
@@ -14,14 +15,21 @@ const columns = [
     },
     {
         title: '比赛名称',
-        dataIndex: 'contests_name',
-        key: 'contests_name',
+        dataIndex: '',
+        key: '',
+        render: (text) => {      
+            console.log(text);
+              
+        return <Link to={'/contest/' + text.cid + '/message/' + text.mid}>{text.contests_name}</Link>
+    }
     },
     {
         title: '详情',
         dataIndex: '',
         key: '',
-        render: () => <a>查看详情</a>,
+        render: (text) => {
+            return <Link to={'/contest/' + text.cid + '/rank/1'}>查看详情</Link>
+        },
     },
     {
         title: '作者',

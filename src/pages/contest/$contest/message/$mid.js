@@ -1,8 +1,7 @@
 import React from "react";
-// import axios from "axios";
 import CSS from "./mid.css";
 import { connect } from 'dva'
-import { List } from 'react-virtualized';
+import { Spin  } from 'antd'
 
 let hei = 0;
 let flag = -1;
@@ -173,8 +172,8 @@ class ShowMessage extends React.Component {
   render() {
     let date = this.props.date;
     let input = this.props.in;
-    console.log(date);
-
+    // console.log(date);
+    
     return (
       <div>
         <span style={{ fontSize: 30 }}>时间: <span id='time' style={{ color: 'red' }}>00:00</span></span>
@@ -214,7 +213,6 @@ class Detail extends React.Component {
   }
 
   render() {
-    // console.log(document.getElementById('qw'));
     const { loading } = this.props;
     let date3 = [];
     const { Message } = this.props;
@@ -251,12 +249,10 @@ class Detail extends React.Component {
         date3.push(date2);
       }
     }
-    console.log(loading);
-
     return (
       <div>
         {loading ?
-          null : 
+          <Spin/> : 
           <ShowMessage
             {...this.props}
             date={date3}
@@ -268,9 +264,9 @@ class Detail extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { Message } = state.mid
+  const { Message } = state.contest_mid
   return {
-    loading: state.loading.models.mid,
+    loading: state.loading.models.contest_mid,
     Message
   }
 }

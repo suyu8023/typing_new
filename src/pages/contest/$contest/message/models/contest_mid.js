@@ -1,16 +1,15 @@
-import * as service from '../services/mid'
+import * as service from '../services/contest_mid'
 
 
 export default {
 
-  namespace: 'mid',
+  namespace: 'contest_mid',
 
   state: {
 
   },
   effects: {
     * getMessage({ payload: params }, { call, put }) {
-      
       let { data } = yield call(service.getMessage, params.mid)
       yield put({
         type: 'saveMessage',
@@ -31,13 +30,12 @@ export default {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
         let list = pathname.split('/');
-        
-        if (list.length === 4){
-          console.log(list);
+        // console.log(list);
+        if (list.length === 5){
           let reg = /^\d+$/;
-          if (reg.test(list[3])&&list[1]==='practice'&&list[2]==='message'){
+          if (reg.test(list[2])&&reg.test(list[4])&&list[1]==='contest'&&list[3]==='message'){
             dispatch({ type: 'getMessage', payload: {
-              mid: list[3]
+              mid: list[4]
             }})
           }
         }
