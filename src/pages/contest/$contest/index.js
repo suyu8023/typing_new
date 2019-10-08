@@ -1,27 +1,31 @@
 /* eslint-disable */
 
 import React from 'react'
-import { Table, Divider, Tag, Pagination } from 'antd'
+import { Table, Divider, Tag, Pagination, message } from 'antd'
 import { connect } from 'dva'
 import router from 'umi/router';
 import Link from 'umi/link';
-
+import chinaTime from 'china-time'
 const columns = [
     {
         title: 'ID',
         dataIndex: 'cid',
         key: 'cid',
-        // render: text => <a>{text}</a>,
     },
     {
         title: '比赛名称',
         dataIndex: '',
         key: '',
-        render: (text) => {      
-            console.log(text);
-              
-        return <Link to={'/contest/' + text.cid + '/message/' + text.mid}>{text.contests_name}</Link>
-    }
+        render: (text) => {
+            if (chinaTime('YYYY-MM-DD HH:mm:ss') >= text.begin_time && chinaTime('YYYY-MM-DD HH:mm:ss') <= text.end_time) {
+                localStorage.setItem(text.cid, true);
+                return <Link to={'/contest/' + text.cid + '/message/' + text.mid}>{text.contests_name}</Link>
+            }
+            else{
+                localStorage.setItem(text.cid, false);
+               return <span>{text.contests_name}</span>
+            }
+        }
     },
     {
         title: '详情',
@@ -60,7 +64,19 @@ const columns = [
         title: '状态',
         dataIndex: '',
         key: '',
-        render: () => <a>end</a>,
+        render: (text) => {
+            console.log(chinaTime('YYYY-MM-DD HH:mm:ss') > text.begin_time);
+
+            if (chinaTime('YYYY-MM-DD HH:mm:ss') >= text.begin_time && chinaTime('YYYY-MM-DD HH:mm:ss') <= text.end_time) {
+                return <span style={{ color: 'green' }}>running</span>
+            }
+            else if (chinaTime('YYYY-MM-DD HH:mm:ss') > text.end_time) {
+                return <span style={{ color: 'red' }}>end</span>
+            }
+            else if (chinaTime('YYYY-MM-DD HH:mm:ss') < text.begin_time) {
+                return <span style={{ color: 'gray' }}>waiting</span>
+            }
+        },
     },
 ];
 
@@ -69,6 +85,13 @@ const data = [];
 class Index extends React.Component {
     constructor(props) {
         super(props);
+    }
+
+    componentWillMount() {
+        if (sessionStorage.getItem('username') === null) {
+            message.loading('请登录', 0.5);
+            router.push('/');
+        }
     }
 
     onChange = (e) => {

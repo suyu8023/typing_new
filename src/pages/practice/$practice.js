@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import React from 'react'
-import { Table, Divider, Tag, Pagination } from 'antd'
+import { Table, Divider, Tag, Pagination, message } from 'antd'
 import { connect } from 'dva'
 import router from 'umi/router';
 import Link from 'umi/link';
@@ -11,12 +11,15 @@ const columns = [
         title: 'ID',
         dataIndex: 'mid',
         key: 'mid',
-        render: text => <Link to={'/practice/message/' + text}>{text}</Link>,
     },
     {
         title: '标题',
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: '',
+        key: '',
+        render: text => {
+            return <Link to={'/practice/message/' + text.mid}>{text.name}</Link>
+        }
+
     },
     {
         title: '作者',
@@ -45,6 +48,13 @@ const data = [];
 class Index extends React.Component {
     constructor(props) {
         super(props);
+    }
+
+    componentWillMount() {
+        if (sessionStorage.getItem('username') === null) {
+            message.loading('请登录', 0.5);
+            router.push('/');
+        }
     }
 
     onChange = (e) => {

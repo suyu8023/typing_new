@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import React from 'react'
-import { Table, Divider, Tag, Pagination, Modal, Button } from 'antd'
+import { Table, Divider, Tag, Pagination, Modal, Button, message } from 'antd'
 import { connect } from 'dva'
 import router from 'umi/router';
 import { Chart, Geom, Axis, Tooltip } from "bizcharts";
@@ -12,6 +12,13 @@ class Index extends React.Component {
         this.state = {
             visible: false,
             data: []
+        }
+    }
+
+    componentWillMount() {
+        if (sessionStorage.getItem('username') === null) {
+            message.loading('请登录', 0.5);
+            router.push('/');
         }
     }
 
@@ -92,6 +99,20 @@ class Index extends React.Component {
                 title: '等级',
                 dataIndex: 'grade',
                 key: 'grade',
+                render: (text) => {
+                    if (text === '优秀,继续保持!') {
+                        return <span style={{ color: 'red' }}>{text}</span>
+                    }
+                    else if (text === '及格,继续努力!') {
+                        return <span style={{ color: '#090' }}>{text}</span>
+                    }
+                    else if (text === '不及格,加强练习!') {
+                        return <span style={{ color: '#25a6ef' }}>{text}</span>
+                    }
+                    else if (text === '良好,继续加油!') {
+                        return <span style={{ color: '#B30099' }}>{text}</span>
+                    }
+                },
             },
             {
                 title: '打字总数',

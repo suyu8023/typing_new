@@ -18,6 +18,16 @@ export default {
         }
       })
     },
+    * subContestPractice({ payload: params }, { call, put }) {
+      
+      let { data } = yield call(service.subContestPractice, params)
+      // yield put({
+      //   type: 'saveMessage',
+      //   payload: {
+      //     data: data[0].message
+      //   }
+      // })
+    },
   },
 
   reducers: {
@@ -30,7 +40,6 @@ export default {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
         let list = pathname.split('/');
-        // console.log(list);
         if (list.length === 5){
           let reg = /^\d+$/;
           if (reg.test(list[2])&&reg.test(list[4])&&list[1]==='contest'&&list[3]==='message'){

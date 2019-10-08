@@ -1,9 +1,9 @@
-import request from '../../util/Request'
+import request from '../../../util/Request'
 
 // 获取数据
 
-export function getStatusNum(){
-  return request(`../api/status`)
+export function time(){
+  return request(`../api/time`)
 }
 
 export function login(params){

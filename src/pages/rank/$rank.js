@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import React from 'react'
-import { Table, Divider, Tag, Pagination, Modal, Button } from 'antd'
+import { Table, Divider, Tag, Pagination, Modal, Button, message } from 'antd'
 import { connect } from 'dva'
 import router from 'umi/router';
 import { Chart, Geom, Axis, Tooltip } from "bizcharts";
@@ -16,6 +16,13 @@ class Index extends React.Component {
         this.state = {
             visible: false,
             data: []
+        }
+    }
+
+    componentWillMount() {
+        if (sessionStorage.getItem('username') === null) {
+            message.loading('请登录', 0.5);
+            router.push('/');
         }
     }
 

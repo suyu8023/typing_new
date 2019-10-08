@@ -12,7 +12,7 @@ class MainLayout extends React.Component {
 
   render() {
     return (
-      <Header>{this.props.children}</Header>
+      <Header {...this.props}>{this.props.children}</Header>
     );
   }
 }

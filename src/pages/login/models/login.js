@@ -1,26 +1,33 @@
-import * as service from '../services/header'
+import * as service from '../services/login'
 import { message } from 'antd'
+import router from 'umi/router';
 
 export default {
 
-  namespace: 'header',
+  namespace: 'login',
 
   state: {
 
   },
   effects: {
     * login({ payload: params }, { call, put }) {
-      const User = yield call(service.login, params);      
+      const User = yield call(service.login, params);  
+      const Time = yield call(service.time);
+      // console.log(Time);          
       if (parseInt(User.data.msg) === 200) {
         localStorage.setItem('status', User.data.data.status);
         localStorage.setItem('username', User.data.data.username);
+        localStorage.setItem('nickname', User.data.data.nickname);
         localStorage.setItem('uid', User.data.data.uid);
+        sessionStorage.setItem('username', User.data.data.username)
+        localStorage.setItem('time', Time.data.time)
         yield put({
           type: 'saveLogin',
           payload: {
             data: true
           }
         });
+        router.push(`/`);
       }
       else{
         yield put({
@@ -30,7 +37,8 @@ export default {
           }
         });
         message.error('账号或密码错误')
-      }
+      }   
+      console.log(sessionStorage)   
     },
   },
 

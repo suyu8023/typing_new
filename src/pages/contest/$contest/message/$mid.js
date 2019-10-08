@@ -1,7 +1,8 @@
 import React from "react";
 import CSS from "./mid.css";
 import { connect } from 'dva'
-import { Spin  } from 'antd'
+import { Spin, message, Button } from 'antd'
+import router from 'umi/router'
 
 let hei = 0;
 let flag = -1;
@@ -12,6 +13,7 @@ let num = 0;
 let wrong_num1;
 let true_num1;
 let true_num2 = 0;
+let line_data = '';
 let back_num = 0;
 let backFlag = true;
 let qtime = 0;
@@ -40,9 +42,36 @@ class List1 extends React.Component {
     this.input.focus();
   };
 
+  countTime = () => {
+    qtime++;
+    if (document.getElementById('time') != null && document.getElementById('speed') != null) {
+      document.getElementById('time').innerText = (Array(2).join('0') + Math.floor(qtime / 60)).slice(-2) + ':' + (Array(2).join('0') + Math.floor(qtime % 60)).slice(-2);
+      document.getElementById('speed').innerText = (true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60)) * 60).toFixed(2) + 'KPM';
+      if (qtime % 5 == 0) {
+        line_data = line_data + "{y:" + (true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60)) * 60).toFixed(2) + ",x:" + qtime + "},";
+      }
+      setTimeout(this.countTime, 1000);
+    }
+  }
+
+  componentWillUnmount() {
+    counttime = false;
+    qtime = -1;
+    line_data = '';
+    hei = 0;
+    flag = -1;
+    counttime = false;
+    true_num = 0;
+    wrong_num = 0;
+    num = 0;
+    wrong_num1 = 0;
+    true_num1 = 0;
+    true_num2 = 0;
+  }
+
   oninput = e => {
     if (counttime === false) {
-      this.props.countTime();
+      this.countTime();
       counttime = true;
     }
     let i = parseInt(e.target.id.slice(4));
@@ -82,6 +111,7 @@ class List1 extends React.Component {
       document.getElementById('num').innerText = num + true_num1 + wrong_num1;
       document.getElementById('true_num').innerText = true_num + true_num1;
       document.getElementById('wrong_num').innerText = wrong_num + wrong_num1;
+      document.getElementById('correct_rate').innerText = ((true_num + true_num1) / (num + true_num1 + wrong_num1) * 100).toFixed(2) + '%';
 
       this.setState({
         value: data,
@@ -96,11 +126,11 @@ class List1 extends React.Component {
       document.getElementById('num').innerText = num;
       document.getElementById('true_num').innerText = true_num + true_num1;
       document.getElementById('wrong_num').innerText = wrong_num + wrong_num1;
+      document.getElementById('correct_rate').innerText = ((true_num + true_num1) / (num) * 100).toFixed(2) + '%';
+
       this.props.bark(nextIndex);
     }
   };
-
-
 
   render() {
     let index = this.props.index;
@@ -146,14 +176,7 @@ class ShowMessage extends React.Component {
 
   list = [];
 
-  countTime = () => {
-    qtime++;
-    if (document.getElementById('time') != null && document.getElementById('speed') != null) {
-      document.getElementById('time').innerText = (Array(2).join('0') + Math.floor(qtime / 60)).slice(-2) + ':' + (Array(2).join('0') + Math.floor(qtime % 60)).slice(-2);
-      document.getElementById('speed').innerText = (true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60)) * 60).toFixed(2) + 'KPM';
-      setTimeout(this.countTime, 1000);
-    }
-  }
+
 
   bark = index => {
     this.setState(
@@ -169,18 +192,69 @@ class ShowMessage extends React.Component {
     );
   };
 
+  handleSub = () => {
+    let time = document.getElementById('time').innerText;
+    let speed = document.getElementById('speed').innerText;
+    let num = document.getElementById('num').innerText;
+    let true_num = document.getElementById('true_num').innerText;
+    let wrong_num = document.getElementById('wrong_num').innerText;
+    let correct_rate = document.getElementById('correct_rate').innerText;
+    speed = parseFloat(speed.slice(0, speed.length - 3));
+    correct_rate = parseFloat(correct_rate.slice(0, correct_rate.length - 1))
+
+    let str = "不及格,加强练习!"
+    if (speed >= 200.0 && correct_rate >= 95.0) {
+      str = "优秀,继续保持!";
+    } else if (speed >= 170.0 && correct_rate >= 95.0) {
+      str = "良好,继续加油!";
+    } else if (speed >= 110.0 && correct_rate >= 95.0) {
+      str = "及格,继续努力!";
+    }
+    let obj = "{" +
+      '"cid":' + '"' + this.props.location.pathname.split('/')[2] + '",' +
+      '"uid":' + '"' + localStorage.getItem('uid') + '",' +
+      '"mid":' + '"' + this.props.location.pathname.split('/')[4] + '",' +
+      '"username":' + '"' + localStorage.getItem('username') + '",' +
+      '"nickname":' + '"' + localStorage.getItem('nickname') + '",' +
+      '"speed":' + '"' + speed + '",' +
+      '"correct_rate":' + '"' + correct_rate + '",' +
+      '"wordnum":' + '"' + num + '",' +
+      '"wrtime":' + '"' + time + '",' +
+      '"instan":' + '"' + '[' + line_data + ']' + '",' +
+      '"grade":' + '"' + str + '"'
+      // mid: this.props.location.pathname.split('/')[3],
+      // username: localStorage.getItem('username'),
+      // nickname: localStorage.getItem('nickname'),
+      // speed: speed,
+      // correct_rate: correct_rate,
+      // wordnum: num,
+      // wrtime: time,
+      // instan: line_data,
+      // grade: str,
+      + "}"
+    // console.log(obj);
+    obj = JSON.parse(obj);
+    // console.log(obj);
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'contest_mid/subContestPractice',
+      payload: obj
+    })
+  }
+
   render() {
     let date = this.props.date;
     let input = this.props.in;
-    // console.log(date);
-    
+
     return (
       <div>
         <span style={{ fontSize: 30 }}>时间: <span id='time' style={{ color: 'red' }}>00:00</span></span>
         <span style={{ fontSize: 30 }}> 速度:<span id='speed'>0KPM</span></span>
+        <span style={{ fontSize: 30 }}> 正确率:<span id='correct_rate'>0%</span></span>
         <span style={{ fontSize: 30 }}> 打字总数:<span id='num'>0</span></span>
         <span style={{ fontSize: 30 }}> 正确字数:<span id='true_num'>0</span></span>
         <span style={{ fontSize: 30 }}> 错误字数:<span id='wrong_num'>0</span></span>
+        <span style={{ float: "right" }}><Button type='primary' onClick={this.handleSub}>提交</Button></span>
 
         <div id='qw' style={{ height: 680, overflow: 'hidden' }}>
           {date.map((item, index) => {
@@ -194,7 +268,6 @@ class ShowMessage extends React.Component {
                 activeIndex={this.state.activeIndex}
                 bark={this.bark}
                 ref={ref => (this.list[index] = ref)}
-                countTime={this.countTime}
               />
             );
           })}
@@ -210,6 +283,13 @@ class Detail extends React.Component {
     this.state = {
       date1: []
     };
+  }
+
+  componentWillMount() {
+    if (sessionStorage.getItem('username') === null) {
+      message.loading('请登录', 0.5);
+      router.push('/');
+    }
   }
 
   render() {
@@ -252,7 +332,7 @@ class Detail extends React.Component {
     return (
       <div>
         {loading ?
-          <Spin/> : 
+          <Spin /> :
           <ShowMessage
             {...this.props}
             date={date3}
