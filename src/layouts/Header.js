@@ -13,13 +13,13 @@ class Index extends React.Component {
     }
 
     render() {
-        const { location } = this.props;
-        console.log(location.pathname.split('/')[1]);
-        
+        const { location } = this.props; 
+               
         return (
             <Layout className="layout" style={{ height: '100%' }}>
                 <Header>
                     <div className={HeaderCss.logo} />
+                    {!location.pathname.includes('admin')?
                     <Menu
                         theme="dark"
                         mode="horizontal"
@@ -49,6 +49,34 @@ class Index extends React.Component {
                             }
                         </Menu.Item>
                     </Menu>
+                    :
+                    <Menu
+                        theme="dark"
+                        mode="horizontal"
+                        defaultSelectedKeys={[]}
+                        style={{ lineHeight: '64px' }}
+                    >
+                        <Menu.Item key="message">
+                            <Link to="/admin/message/1">Message</Link>
+                        </Menu.Item>
+                        <Menu.Item key="contest">
+                            <Link to="/admin/contest/1">Contest</Link>
+                        </Menu.Item>
+                        <Menu.Item key="user">
+                            <Link to="/admin/user/1">User</Link>
+                        </Menu.Item>
+                        <Menu.Item key="login" style={{ marginLeft: '60%', backgroundColor: 'write' }}>
+                            {sessionStorage.getItem('username') === null ? <Link to='/login'>登录</Link> :
+                                <a>{localStorage.getItem('username')}</a>
+                            }
+                        </Menu.Item>
+                        <Menu.Item key="reg" >
+                        {sessionStorage.getItem('username') === null ? <Link to='/reg'>注册</Link> :
+                                <a>退出</a>
+                            }
+                        </Menu.Item>
+                    </Menu>
+                    }
                 </Header>
                 <Content style={{ padding: '0 50px' }} id='content'>
                     <Breadcrumb style={{ margin: '16px 0' }}>

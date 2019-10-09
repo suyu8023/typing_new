@@ -43,7 +43,7 @@ export default {
         let list = pathname.split('/');
         
         if (list.length === 4){
-          console.log(list);
+          // console.log(list);
           let reg = /^\d+$/;
           if (reg.test(list[3])&&list[1]==='practice'&&list[2]==='message'){
             dispatch({ type: 'getMessage', payload: {

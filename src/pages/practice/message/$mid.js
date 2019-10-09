@@ -238,6 +238,7 @@ class ShowMessage extends React.Component {
       type: 'mid/subPractice',
       payload: obj
     })
+    router.push('/status/1')
 
   }
 

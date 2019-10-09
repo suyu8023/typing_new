@@ -235,11 +235,13 @@ class ShowMessage extends React.Component {
     // console.log(obj);
     obj = JSON.parse(obj);
     // console.log(obj);
-    const { dispatch } = this.props;
+    const { dispatch, location } = this.props;
     dispatch({
       type: 'contest_mid/subContestPractice',
       payload: obj
     })
+    let list = location.pathname.split('/');
+    router.push(`/${list[1]}/${list[2]}/rank/1`)
   }
 
   render() {
