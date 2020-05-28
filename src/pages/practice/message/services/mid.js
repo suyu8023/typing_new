@@ -1,21 +1,20 @@
-import request from '../../../../util/Request'
+import request from '../../../../util/Request';
 
 // 获取数据
 
-export function getMessage(mid){
+export function getMessage(mid) {
   // console.log(mid);
-  
-  return request(`../../api/practice/${mid}`)
+
+  return request(`../../api/message/find/${mid}`);
 }
 
-export function subPractice(params){
-  console.log(JSON.stringify(params))
-  return request(`../../api/status/add`,{
-    method: "POST",
+export function subPractice(params) {
+  console.log(JSON.stringify(params));
+  return request(`../../api/status/create`, {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(params)
-  })
+    body: JSON.stringify(params),
+  });
 }
-

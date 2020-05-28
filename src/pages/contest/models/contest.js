@@ -1,62 +1,51 @@
-import * as service from '../services/contest'
-
+import * as service from '../services/contest';
 
 export default {
-
   namespace: 'contest',
 
-  state: {
-
-  },
+  state: {},
   effects: {
-    * getContestNum(_, { call, put }) {
-      const UserNum = yield call(service.getContestNum);
-      if (parseInt(UserNum.data.msg) === 200) {
-        yield put({
-          type: 'saveContestNum',
-          payload: {
-            data: UserNum.data.data.num
-          }
-        });
-      }
-    },
-    * getContestList({ payload: params }, { call, put }) {
-      let { data } = yield call(service.getContestList, params.page, params.limit)
+    *getContestList({ payload: params }, { call, put }) {
+      let { data } = yield call(service.getContestList, params.page, params.limit);
       yield put({
         type: 'saveContestList',
         payload: {
-          data: data
-        }
-      })
+          data: data,
+        },
+      });
     },
   },
 
   reducers: {
-    saveContestNum(state, { payload: { data: result } }) {
-      const ContestNum = result;
-      return { ...state, ContestNum }
-    },
-    saveContestList(state, { payload: { data: result } }) {
-      const ContestList = result;
-      return { ...state, ContestList }
+    saveContestList(
+      state,
+      {
+        payload: { data: result },
+      },
+    ) {
+      const ContestList = result.data.rows;
+      const ContestNum = result.data.count;
+      return { ...state, ContestList, ContestNum };
     },
   },
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
         let list = pathname.split('/');
-        if (list.length === 3){
+        if (list.length === 3) {
           // console.log("qwqwqwqw");
           let reg = /^\d+$/;
-          if (reg.test(list[2])&&list[1] === 'contest'){
-            dispatch({ type: 'getContestNum' })
-            dispatch({ type: 'getContestList', payload: {
-              page: parseInt(list[2]),
-              limit : 10
-            }})
+          if (reg.test(list[2]) && list[1] === 'contest') {
+            dispatch({
+              type: 'getContestList',
+              payload: {
+                page: parseInt(list[2]),
+                limit: 10,
+              },
+            });
           }
         }
       });
     },
-  }
-}
+  },
+};

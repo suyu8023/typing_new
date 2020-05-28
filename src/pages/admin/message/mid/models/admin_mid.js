@@ -1,13 +1,9 @@
-import * as service from '../services/admin_mid'
-
-
+import * as service from '../services/admin_mid';
+import { message } from 'antd';
 export default {
-
   namespace: 'admin_mid',
 
-  state: {
-
-  },
+  state: {},
   effects: {
     // * getUserNum(_, { call, put }) {
     //   const UserNum = yield call(service.getUserNum);
@@ -20,35 +16,52 @@ export default {
     //     });
     //   }
     // },
-    * getMessage({ payload: params }, { call, put }) {
-      let { data } = yield call(service.getMessage, params.mid)
+    *getMessage({ payload: params }, { call, put }) {
+      let { data } = yield call(service.getMessage, params.mid);
       yield put({
         type: 'saveMessage',
         payload: {
-          data: data
-        }
-      })
+          data: data,
+        },
+      });
     },
-    * updateMessage({ payload: params }, { call, put }) {
-      let { data } = yield call(service.updateMessage, params)
+    *updateMessage({ payload: params }, { call, put }) {
+      let { data } = yield call(service.updateMessage, params);
+      if (data.success == true) message.success('更新成功');
+      else message.success(data.msg);
     },
-    * deleteMessage({ payload: params }, { call, put }) {
-      let { data } = yield call(service.deleteMessage, params)
+    *deleteMessage({ payload: params }, { call, put }) {
+      let { data } = yield call(service.deleteMessage, params);
+      if (data.success == true) message.success('更新成功');
+      else message.success(data.msg);
     },
   },
 
   reducers: {
-    saveUserNum(state, { payload: { data: result } }) {
+    saveUserNum(
+      state,
+      {
+        payload: { data: result },
+      },
+    ) {
       const UserNum = result;
-      return { ...state, UserNum }
+      return { ...state, UserNum };
     },
-    saveMessage(state, { payload: { data: result } }) {
-      // console.log(result);
-      const Message = result[0].message;
-      const diff = result[0].diff;
-      const name = result[0].name;
-      const ID = result[0].mid;
-      return { ...state, Message, diff, name, ID }
+    saveMessage(
+      state,
+      {
+        payload: { data: result },
+      },
+    ) {
+      const Message = result.data;
+      console.log(Message);
+
+      // const Message = result[0].message;
+      // const diff = result[0].diff;
+      // const name = result[0].name;
+      // const ID = result[0].mid;
+
+      return { ...state, Message };
     },
   },
   subscriptions: {
@@ -56,16 +69,24 @@ export default {
       return history.listen(({ pathname, query }) => {
         let list = pathname.split('/');
         console.log(list);
-        
-        if (list.length === 5){
+
+        if (list.length === 5) {
           let reg = /^\d+$/;
-          if (reg.test(list[4])&&list[1]==='admin'&&list[2]==='message'&&list[3]==='mid'){
-            dispatch({ type: 'getMessage', payload: {
-              mid: parseInt(list[4]),
-            }})
+          if (
+            reg.test(list[4]) &&
+            list[1] === 'admin' &&
+            list[2] === 'message' &&
+            list[3] === 'mid'
+          ) {
+            dispatch({
+              type: 'getMessage',
+              payload: {
+                mid: parseInt(list[4]),
+              },
+            });
           }
         }
       });
     },
-  }
-}
+  },
+};

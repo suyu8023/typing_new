@@ -1,32 +1,21 @@
-import request from '../../../../../util/Request'
+import request from '../../../../../util/Request';
 
 // 获取数据
 
-export function getContest(cid){
-  return request(`../../../api/contest_cid/${cid}`)
+export function getContest(cid) {
+  return request(`../../../api/contest/find/${cid}`);
 }
 
-export function getAllMessage(){
-  return request(`../../../api/message`)
+export function getAllMessage() {
+  return request(`../../../api/message/list`);
 }
 
-
-export function updateContest(params){
-  return request(`../../../api/contest_cid/update`,{
-    method: "POST",
+export function updateContest(params) {
+  return request(`../../../api/contest/update`, {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(params)
-  })
-}
-
-export function deleteMessage(params){
-  return request(`../../../api/message/delete`,{
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(params)
-  })
+    body: JSON.stringify(params),
+  });
 }

@@ -1,8 +1,8 @@
-import React from "react";
-import CSS from "./mid.css";
-import { connect } from 'dva'
-import { Spin, message, Button } from 'antd'
-import router from 'umi/router'
+import React from 'react';
+import CSS from './mid.css';
+import { connect } from 'dva';
+import { Spin, message, Button } from 'antd';
+import router from 'umi/router';
 
 let hei = 0;
 let flag = -1;
@@ -21,7 +21,6 @@ function handleClick(e) {
   e.preventDefault();
 }
 
-
 class List1 extends React.Component {
   constructor(props) {
     super(props);
@@ -37,7 +36,7 @@ class List1 extends React.Component {
 
   barkTwice = () => {
     if (this.input == null) {
-      console.log("++++++")
+      console.log('++++++');
     }
     this.input.focus();
   };
@@ -45,14 +44,25 @@ class List1 extends React.Component {
   countTime = () => {
     qtime++;
     if (document.getElementById('time') != null && document.getElementById('speed') != null) {
-      document.getElementById('time').innerText = (Array(2).join('0') + Math.floor(qtime / 60)).slice(-2) + ':' + (Array(2).join('0') + Math.floor(qtime % 60)).slice(-2);
-      document.getElementById('speed').innerText = (true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60)) * 60).toFixed(2) + 'KPM';
+      document.getElementById('time').innerText =
+        (Array(2).join('0') + Math.floor(qtime / 60)).slice(-2) +
+        ':' +
+        (Array(2).join('0') + Math.floor(qtime % 60)).slice(-2);
+      document.getElementById('speed').innerText =
+        ((true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60))) * 60).toFixed(2) +
+        'KPM';
       if (qtime % 5 == 0) {
-        line_data = line_data + "{y:" + (true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60)) * 60).toFixed(2) + ",x:" + qtime + "},";
+        line_data =
+          line_data +
+          '{y:' +
+          ((true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60))) * 60).toFixed(2) +
+          ',x:' +
+          qtime +
+          '},';
       }
       setTimeout(this.countTime, 1000);
     }
-  }
+  };
 
   componentWillUnmount() {
     counttime = false;
@@ -76,7 +86,7 @@ class List1 extends React.Component {
     }
     let i = parseInt(e.target.id.slice(4));
     if (i >= 3 && flag != i) {
-      document.getElementById("qw").scrollTop = hei + 86;
+      document.getElementById('qw').scrollTop = hei + 86;
       hei += 86;
       flag = i;
     }
@@ -84,11 +94,9 @@ class List1 extends React.Component {
     let j = parseInt(e.target.value.length);
     let max = Math.max(j, this.state.maxlen);
     this.setState({
-      maxlen: max
-    })
-    if (
-      j >= 0 && j < this.state.value.length + 1
-    ) {
+      maxlen: max,
+    });
+    if (j >= 0 && j < this.state.value.length + 1) {
       wrong_num1 = 0;
       true_num1 = 0;
       let data = this.state.value;
@@ -97,13 +105,11 @@ class List1 extends React.Component {
           if (value[k] === data[k].value) {
             data[k].color = 'green';
             true_num1++;
-          }
-          else {
+          } else {
             data[k].color = 'red';
             wrong_num1++;
           }
-        }
-        else {
+        } else {
           data[k].color = '';
         }
       }
@@ -111,13 +117,14 @@ class List1 extends React.Component {
       document.getElementById('num').innerText = num + true_num1 + wrong_num1;
       document.getElementById('true_num').innerText = true_num + true_num1;
       document.getElementById('wrong_num').innerText = wrong_num + wrong_num1;
-      document.getElementById('correct_rate').innerText = ((true_num + true_num1) / (num + true_num1 + wrong_num1) * 100).toFixed(2) + '%';
+      document.getElementById('correct_rate').innerText =
+        (((true_num + true_num1) / (num + true_num1 + wrong_num1)) * 100).toFixed(2) + '%';
 
       this.setState({
         value: data,
       });
     }
-    if (j === this.state.value.length + 1 && value[j - 1] === " ") {
+    if (j === this.state.value.length + 1 && value[j - 1] === ' ') {
       const nextIndex = i + 1;
       num += true_num1 + wrong_num1;
       true_num2 = true_num + true_num1;
@@ -126,7 +133,8 @@ class List1 extends React.Component {
       document.getElementById('num').innerText = num;
       document.getElementById('true_num').innerText = true_num + true_num1;
       document.getElementById('wrong_num').innerText = wrong_num + wrong_num1;
-      document.getElementById('correct_rate').innerText = ((true_num + true_num1) / (num) * 100).toFixed(2) + '%';
+      document.getElementById('correct_rate').innerText =
+        (((true_num + true_num1) / num) * 100).toFixed(2) + '%';
 
       this.props.bark(nextIndex);
     }
@@ -137,12 +145,12 @@ class List1 extends React.Component {
     let disable = {};
     const { activeIndex } = this.props;
     if (activeIndex !== index) {
-      disable.disabled = "disabled";
+      disable.disabled = 'disabled';
     }
     return (
-      <div className={CSS.read} id={"qaq" + index}>
-        <div className={CSS.write} id={"show" + index}>
-          {this.state.value.map((item) => {
+      <div className={CSS.read} id={'qaq' + index}>
+        <div className={CSS.write} id={'show' + index}>
+          {this.state.value.map(item => {
             return (
               <span key={item.index} style={{ backgroundColor: item.color }}>
                 {item.value}
@@ -156,7 +164,7 @@ class List1 extends React.Component {
           onCopy={handleClick}
           onCut={handleClick}
           className={CSS.write}
-          id={"read" + index}
+          id={'read' + index}
           onChange={item => this.oninput(item)}
           {...disable}
           ref={ref => (this.input = ref)}
@@ -176,19 +184,17 @@ class ShowMessage extends React.Component {
 
   list = [];
 
-
-
   bark = index => {
     this.setState(
       {
-        activeIndex: index
+        activeIndex: index,
       },
 
       () => {
         if (this.list[index] != null) {
-          this.list[index].barkTwice()
+          this.list[index].barkTwice();
         }
-      }
+      },
     );
   };
 
@@ -200,28 +206,68 @@ class ShowMessage extends React.Component {
     let wrong_num = document.getElementById('wrong_num').innerText;
     let correct_rate = document.getElementById('correct_rate').innerText;
     speed = parseFloat(speed.slice(0, speed.length - 3));
-    correct_rate = parseFloat(correct_rate.slice(0, correct_rate.length - 1))
+    correct_rate = parseFloat(correct_rate.slice(0, correct_rate.length - 1));
 
-    let str = "不及格,加强练习!"
+    let str = '不及格,加强练习!';
     if (speed >= 200.0 && correct_rate >= 95.0) {
-      str = "优秀,继续保持!";
+      str = '优秀,继续保持!';
     } else if (speed >= 170.0 && correct_rate >= 95.0) {
-      str = "良好,继续加油!";
+      str = '良好,继续加油!';
     } else if (speed >= 110.0 && correct_rate >= 95.0) {
-      str = "及格,继续努力!";
+      str = '及格,继续努力!';
     }
-    let obj = "{" +
-      '"cid":' + '"' + this.props.location.pathname.split('/')[2] + '",' +
-      '"uid":' + '"' + localStorage.getItem('uid') + '",' +
-      '"mid":' + '"' + this.props.location.pathname.split('/')[4] + '",' +
-      '"username":' + '"' + localStorage.getItem('username') + '",' +
-      '"nickname":' + '"' + localStorage.getItem('nickname') + '",' +
-      '"speed":' + '"' + speed + '",' +
-      '"correct_rate":' + '"' + correct_rate + '",' +
-      '"wordnum":' + '"' + num + '",' +
-      '"wrtime":' + '"' + time + '",' +
-      '"instan":' + '"' + '[' + line_data + ']' + '",' +
-      '"grade":' + '"' + str + '"'
+    let obj =
+      '{' +
+      '"cid":' +
+      '"' +
+      this.props.location.pathname.split('/')[2] +
+      '",' +
+      '"uid":' +
+      '"' +
+      localStorage.getItem('uid') +
+      '",' +
+      '"mid":' +
+      '"' +
+      this.props.location.pathname.split('/')[4] +
+      '",' +
+      '"username":' +
+      '"' +
+      localStorage.getItem('username') +
+      '",' +
+      '"nickname":' +
+      '"' +
+      localStorage.getItem('nickname') +
+      '",' +
+      '"speed":' +
+      '"' +
+      speed +
+      '",' +
+      '"correct_rate":' +
+      '"' +
+      correct_rate +
+      '",' +
+      '"wordnum":' +
+      '"' +
+      num +
+      '",' +
+      '"wrtime":' +
+      '"' +
+      time +
+      '",' +
+      '"instan":' +
+      '"' +
+      '[' +
+      line_data +
+      ']' +
+      '",' +
+      '"grade":' +
+      '"' +
+      str +
+      '",' +
+      '"mesname":' +
+      '"' +
+      this.props.Mesname +
+      '"' +
       // mid: this.props.location.pathname.split('/')[3],
       // username: localStorage.getItem('username'),
       // nickname: localStorage.getItem('nickname'),
@@ -231,18 +277,18 @@ class ShowMessage extends React.Component {
       // wrtime: time,
       // instan: line_data,
       // grade: str,
-      + "}"
+      '}';
     // console.log(obj);
     obj = JSON.parse(obj);
     // console.log(obj);
     const { dispatch, location } = this.props;
     dispatch({
       type: 'contest_mid/subContestPractice',
-      payload: obj
-    })
+      payload: obj,
+    });
     let list = location.pathname.split('/');
-    router.push(`/${list[1]}/${list[2]}/rank/1`)
-  }
+    router.push(`/${list[1]}/${list[2]}/rank/1`);
+  };
 
   render() {
     let date = this.props.date;
@@ -250,20 +296,47 @@ class ShowMessage extends React.Component {
 
     return (
       <div>
-        <span style={{ fontSize: 30 }}>时间: <span id='time' style={{ color: 'red' }}>00:00</span></span>
-        <span style={{ fontSize: 30 }}> 速度:<span id='speed'>0KPM</span></span>
-        <span style={{ fontSize: 30 }}> 正确率:<span id='correct_rate'>0%</span></span>
-        <span style={{ fontSize: 30 }}> 打字总数:<span id='num'>0</span></span>
-        <span style={{ fontSize: 30 }}> 正确字数:<span id='true_num'>0</span></span>
-        <span style={{ fontSize: 30 }}> 错误字数:<span id='wrong_num'>0</span></span>
-        <span style={{ float: "right" }}><Button type='primary' onClick={this.handleSub}>提交</Button></span>
+        <div>
+          <span style={{ fontSize: 30 }}>
+            时间:{' '}
+            <span id="time" style={{ color: 'red' }}>
+              00:00
+            </span>
+          </span>
+          <span style={{ fontSize: 30 }}>
+            {' '}
+            速度:<span id="speed">0KPM</span>
+          </span>
+          <span style={{ fontSize: 30 }}>
+            {' '}
+            正确率:<span id="correct_rate">0%</span>
+          </span>
+          <span style={{ fontSize: 30 }}>
+            {' '}
+            打字总数:<span id="num">0</span>
+          </span>
+          <span style={{ fontSize: 30 }}>
+            {' '}
+            正确字数:<span id="true_num">0</span>
+          </span>
+          <span style={{ fontSize: 30 }}>
+            {' '}
+            错误字数:<span id="wrong_num">0</span>
+          </span>
+          <span style={{ float: 'right' }}>
+            <Button type="primary" onClick={this.handleSub}>
+              提交
+            </Button>
+          </span>
+        </div>
 
-        <div id='qw' style={{ height: 680, overflow: 'hidden' }}>
+        <div id="qw" style={{ height: 680, overflow: 'hidden' }}>
           {date.map((item, index) => {
             return (
-              <List1 id='list'
+              <List1
+                id="list"
                 key={index}
-                id={"qaq" + item.mid}
+                id={'qaq' + item.mid}
                 list={item}
                 index={index}
                 in={input}
@@ -283,7 +356,7 @@ class Detail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      date1: []
+      date1: [],
     };
   }
 
@@ -300,10 +373,10 @@ class Detail extends React.Component {
     const { Message } = this.props;
     let date = Message;
     if (Message != undefined) {
-      date = date.replace(/\n/g, " ");
+      date = date.replace(/\n/g, ' ');
       date = date.split(/\s+/);
       let date1 = [];
-      let str = "";
+      let str = '';
       for (let i = 0; i < date.length; i++) {
         if (i % 20 === 0 && i !== 0) {
           date1.push(str);
@@ -312,7 +385,7 @@ class Detail extends React.Component {
           if (i === 0) {
             str = str + date[i];
           } else {
-            str += " " + date[i];
+            str += ' ' + date[i];
           }
         }
       }
@@ -324,33 +397,24 @@ class Detail extends React.Component {
         for (let j = 0; j < date1[i].length; j++) {
           let s = {};
           s.index = xx++;
-          s.color = "";
+          s.color = '';
           s.value = date1[i][j];
           date2.push(s);
         }
         date3.push(date2);
       }
     }
-    return (
-      <div>
-        {loading ?
-          <Spin /> :
-          <ShowMessage
-            {...this.props}
-            date={date3}
-          />
-        }
-      </div>
-    );
+    return <div>{loading ? <Spin /> : <ShowMessage {...this.props} date={date3} />}</div>;
   }
 }
 
 function mapStateToProps(state) {
-  const { Message } = state.contest_mid
+  const { Message, Mesname } = state.contest_mid;
   return {
     loading: state.loading.models.contest_mid,
-    Message
-  }
+    Message,
+    Mesname,
+  };
 }
 
 export default connect(mapStateToProps)(Detail);

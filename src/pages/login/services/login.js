@@ -1,17 +1,17 @@
-import request from '../../../util/Request'
+import request from '../../../util/Request';
 
 // 获取数据
 
-export function time(){
-  return request(`../api/time`)
+export function time() {
+  return request(`../api/time`);
 }
 
-export function login(params){
-  return request(`../api/user`,{
-    method: "POST",
+export function login(params) {
+  return request(`../api/user/login`, {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(params)
-  })
+    body: JSON.stringify(params),
+  });
 }
