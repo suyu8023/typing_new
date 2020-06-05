@@ -1,10 +1,11 @@
 /* eslint-disable */
 
 import React from 'react';
-import { Table, Divider, Tag, Pagination, message } from 'antd';
+import { Table, Divider, Tag, Pagination, message, Input, Row, Col } from 'antd';
 import { connect } from 'dva';
 import router from 'umi/router';
 import Link from 'umi/link';
+const { Search } = Input;
 
 const columns = [
   {
@@ -57,7 +58,17 @@ class Index extends React.Component {
   }
 
   onChange = e => {
-    router.push(`/practice/${e}`);
+    const { location } = this.props;
+    if (JSON.stringify(location.query) == '{}') {
+      router.push(`/practice/${e}`);
+    } else {
+      router.push(`/practice/${e}${location.search}`);
+    }
+  };
+
+  onSearch = e => {
+    if (e == '') router.push(router.push(`/practice/1`));
+    else router.push(`/practice/1?name=${e}`);
   };
 
   render() {
@@ -74,6 +85,12 @@ class Index extends React.Component {
     }
     return (
       <div>
+        <Row>
+          <Col span={6}>
+            <Search placeholder="输入文章名" onSearch={this.onSearch} enterButton />
+          </Col>
+        </Row>
+
         <div>
           <Table
             pagination={false}

@@ -14,8 +14,16 @@ export default {
         },
       });
     },
+    *getMesnameList({ payload: params }, { call, put }) {
+      let { data } = yield call(service.getMesnameList, params.page, params.limit, params.name);
+      yield put({
+        type: 'saveMessageList',
+        payload: {
+          data: data,
+        },
+      });
+    },
     *deleteMessage({ payload: params }, { call, put }) {
-      // console.log(location);
       let { data } = yield call(service.deleteMessage, params.obj);
       yield put({ type: 'getUserNum' });
       yield put({
@@ -28,7 +36,6 @@ export default {
     },
 
     *addMessage({ payload: params }, { call, put }) {
-      // console.log(location);
       let { data } = yield call(service.addMessage, params);
     },
   },
@@ -52,14 +59,24 @@ export default {
         if (list.length === 4) {
           let reg = /^\d+$/;
           if (reg.test(list[3]) && list[1] === 'admin' && list[2] === 'message') {
-            dispatch({ type: 'getUserNum' });
-            dispatch({
-              type: 'getMessageList',
-              payload: {
-                page: parseInt(list[3]),
-                limit: 10,
-              },
-            });
+            if (JSON.stringify(query) == '{}') {
+              dispatch({
+                type: 'getMessageList',
+                payload: {
+                  page: parseInt(list[3]),
+                  limit: 10,
+                },
+              });
+            } else {
+              dispatch({
+                type: 'getMesnameList',
+                payload: {
+                  page: parseInt(list[3]),
+                  limit: 10,
+                  name: query.name,
+                },
+              });
+            }
           }
         }
       });

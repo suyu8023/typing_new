@@ -14,6 +14,15 @@ export default {
         },
       });
     },
+    *getConnameList({ payload: params }, { call, put }) {
+      let { data } = yield call(service.getConnameList, params.page, params.limit, params.name);
+      yield put({
+        type: 'saveContestList',
+        payload: {
+          data: data,
+        },
+      });
+    },
   },
 
   reducers: {
@@ -33,16 +42,26 @@ export default {
       return history.listen(({ pathname, query }) => {
         let list = pathname.split('/');
         if (list.length === 3) {
-          // console.log("qwqwqwqw");
           let reg = /^\d+$/;
           if (reg.test(list[2]) && list[1] === 'contest') {
-            dispatch({
-              type: 'getContestList',
-              payload: {
-                page: parseInt(list[2]),
-                limit: 10,
-              },
-            });
+            if (JSON.stringify(query) == '{}') {
+              dispatch({
+                type: 'getContestList',
+                payload: {
+                  page: parseInt(list[2]),
+                  limit: 10,
+                },
+              });
+            } else {
+              dispatch({
+                type: 'getConnameList',
+                payload: {
+                  page: parseInt(list[2]),
+                  limit: 10,
+                  name: query.name,
+                },
+              });
+            }
           }
         }
       });

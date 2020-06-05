@@ -14,6 +14,15 @@ export default {
         },
       });
     },
+    *getUserStatusList({ payload: params }, { call, put }) {
+      let { data } = yield call(service.getStatusUserList, params.page, params.limit, params.name);
+      yield put({
+        type: 'saveStatusList',
+        payload: {
+          data: data,
+        },
+      });
+    },
   },
 
   reducers: {
@@ -35,15 +44,25 @@ export default {
         let list = pathname.split('/');
         if (list.length === 3) {
           let reg = /^\d+$/;
-          // console.log(pathname)
           if (reg.test(list[2]) && list[1] === 'status') {
-            dispatch({
-              type: 'getStatusList',
-              payload: {
-                page: parseInt(list[2]),
-                limit: 10,
-              },
-            });
+            if (JSON.stringify(query) == '{}') {
+              dispatch({
+                type: 'getStatusList',
+                payload: {
+                  page: parseInt(list[2]),
+                  limit: 10,
+                },
+              });
+            } else {
+              dispatch({
+                type: 'getUserStatusList',
+                payload: {
+                  page: parseInt(list[2]),
+                  limit: 10,
+                  name: query.name,
+                },
+              });
+            }
           }
         }
       });

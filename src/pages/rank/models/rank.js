@@ -14,6 +14,15 @@ export default {
         },
       });
     },
+    *getUserRankList({ payload: params }, { call, put }) {
+      let { data } = yield call(service.getUserRankList, params.page, params.limit, params.name);
+      yield put({
+        type: 'saveRankList',
+        payload: {
+          data: data,
+        },
+      });
+    },
   },
 
   reducers: {
@@ -35,13 +44,24 @@ export default {
         if (list.length === 3) {
           let reg = /^\d+$/;
           if (reg.test(list[2]) && list[1] === 'rank') {
-            dispatch({
-              type: 'getRankList',
-              payload: {
-                page: parseInt(list[2]),
-                limit: 10,
-              },
-            });
+            if (JSON.stringify(query) == '{}') {
+              dispatch({
+                type: 'getRankList',
+                payload: {
+                  page: parseInt(list[2]),
+                  limit: 10,
+                },
+              });
+            } else {
+              dispatch({
+                type: 'getUserRankList',
+                payload: {
+                  page: parseInt(list[2]),
+                  limit: 10,
+                  name: query.name,
+                },
+              });
+            }
           }
         }
       });

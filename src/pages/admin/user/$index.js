@@ -13,11 +13,13 @@ import {
   Button,
   Form,
   Modal,
+  Row,
+  Col,
 } from 'antd';
 import { connect } from 'dva';
 import router from 'umi/router';
 import Link from 'umi/link';
-const { TextArea } = Input;
+const { TextArea, Search } = Input;
 const { Option } = Select;
 
 const data = [];
@@ -44,7 +46,18 @@ class Index extends React.Component {
   }
 
   onChange = e => {
-    router.push(`/admin/user/${e}`);
+    const { location } = this.props;
+    if (JSON.stringify(location.query) == '{}') {
+      router.push(`/admin/user/${e}`);
+    } else {
+      router.push(`/admin/user/${e}${location.search}`);
+    }
+  };
+
+  onSearch = e => {
+    if (e == '') {
+      router.push(`/admin/user/1`);
+    } else router.push(`/admin/user/1?name=${e}`);
   };
 
   confirm = uid => {
@@ -195,9 +208,17 @@ class Index extends React.Component {
     return (
       <div>
         <div>
-          <Button type="primary" onClick={this.showModal}>
-            增加用户
-          </Button>
+          <Row>
+            <Col span={2}>
+              <Button type="primary" onClick={this.showModal}>
+                增加用户
+              </Button>
+            </Col>
+            <Col span={6}>
+              <Search placeholder="输入用户名" onSearch={this.onSearch} enterButton />
+            </Col>
+          </Row>
+
           <Table
             pagination={false}
             loading={loading}

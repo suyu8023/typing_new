@@ -14,6 +14,15 @@ export default {
         },
       });
     },
+    *getUserNameList({ payload: params }, { call, put }) {
+      let { data } = yield call(service.getUserNameList, params.page, params.limit, params.name);
+      yield put({
+        type: 'saveUserList',
+        payload: {
+          data: data,
+        },
+      });
+    },
     *deleteUser({ payload: params }, { call, put }) {
       let { data } = yield call(service.deleteUser, params.obj);
       if (data.success == true) message.success('删除成功');
@@ -46,13 +55,24 @@ export default {
         if (list.length === 4) {
           let reg = /^\d+$/;
           if (reg.test(list[3]) && list[1] === 'admin' && list[2] === 'user') {
-            dispatch({
-              type: 'getUserList',
-              payload: {
-                page: parseInt(list[3]),
-                limit: 10,
-              },
-            });
+            if (JSON.stringify(query) == '{}') {
+              dispatch({
+                type: 'getUserList',
+                payload: {
+                  page: parseInt(list[3]),
+                  limit: 10,
+                },
+              });
+            } else {
+              dispatch({
+                type: 'getUserNameList',
+                payload: {
+                  page: parseInt(list[3]),
+                  limit: 10,
+                  name: query.name,
+                },
+              });
+            }
           }
         }
       });

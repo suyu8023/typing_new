@@ -14,6 +14,15 @@ export default {
         },
       });
     },
+    *getConnameList({ payload: params }, { call, put }) {
+      let { data } = yield call(service.getConnameList, params.page, params.limit, params.name);
+      yield put({
+        type: 'saveContestList',
+        payload: {
+          data: data,
+        },
+      });
+    },
     *addContest({ payload: params }, { call, put }) {
       let { data } = yield call(service.addContest, params);
       if (data.success == true) message.success('更新成功');
@@ -62,17 +71,26 @@ export default {
       return history.listen(({ pathname, query }) => {
         let list = pathname.split('/');
         if (list.length === 4) {
-          // console.log("qwqwqwqw");
           let reg = /^\d+$/;
           if (reg.test(list[3]) && list[2] === 'contest' && list[1] === 'admin') {
-            dispatch({ type: 'getContestNum' });
-            dispatch({
-              type: 'getContestList',
-              payload: {
-                page: parseInt(list[3]),
-                limit: 10,
-              },
-            });
+            if (JSON.stringify(query) == '{}') {
+              dispatch({
+                type: 'getContestList',
+                payload: {
+                  page: parseInt(list[3]),
+                  limit: 10,
+                },
+              });
+            } else {
+              dispatch({
+                type: 'getConnameList',
+                payload: {
+                  page: parseInt(list[3]),
+                  limit: 10,
+                  name: query.name,
+                },
+              });
+            }
             dispatch({ type: 'getAllMessage' });
           }
         }

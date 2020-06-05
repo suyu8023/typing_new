@@ -1,7 +1,8 @@
 import React from 'react';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu, Breadcrumb, Row, Co } from 'antd';
 import HeaderCss from './Header.css';
 import Link from 'umi/link';
+import classNames from 'classnames';
 const { Header, Content, Footer } = Layout;
 
 class Index extends React.Component {
@@ -16,8 +17,13 @@ class Index extends React.Component {
     const { location } = this.props;
 
     return (
-      <Layout className="layout" style={{ height: '100%' }}>
-        <Header>
+      <Layout
+        className={classNames({
+          'full-width-page': true,
+        })}
+        style={{ height: '100%' }}
+      >
+        <Header className={HeaderCss.Header}>
           <div className={HeaderCss.logo} />
           {!location.pathname.includes('admin') ? (
             <Menu
@@ -38,18 +44,30 @@ class Index extends React.Component {
               <Menu.Item key="rank">
                 <Link to="/rank/1">Rank</Link>
               </Menu.Item>
-              <Menu.Item key="login" style={{ marginLeft: '60%', backgroundColor: 'write' }}>
+              <Menu.Item
+                key="reg"
+                className={HeaderCss.right}
+                style={{ float: 'right', backgroundColor: 'write' }}
+              >
+                {sessionStorage.getItem('username') === null ? (
+                  <Link to="/reg">注册</Link>
+                ) : (
+                  <Link
+                    to="/login"
+                    onClick={() => {
+                      localStorage.clear();
+                      sessionStorage.clear();
+                    }}
+                  >
+                    退出
+                  </Link>
+                )}
+              </Menu.Item>
+              <Menu.Item key="login" style={{ float: 'right', backgroundColor: 'write' }}>
                 {sessionStorage.getItem('username') === null ? (
                   <Link to="/login">登录</Link>
                 ) : (
                   <a>{localStorage.getItem('username')}</a>
-                )}
-              </Menu.Item>
-              <Menu.Item key="reg">
-                {sessionStorage.getItem('username') === null ? (
-                  <Link to="/reg">注册</Link>
-                ) : (
-                  <Link to="/login">退出</Link>
                 )}
               </Menu.Item>
             </Menu>
@@ -80,7 +98,15 @@ class Index extends React.Component {
                 {sessionStorage.getItem('username') === null ? (
                   <Link to="/reg">注册</Link>
                 ) : (
-                  <Link to="/login">退出</Link>
+                  <Link
+                    to="/login"
+                    onClick={() => {
+                      localStorage.clear();
+                      sessionStorage.clear();
+                    }}
+                  >
+                    退出
+                  </Link>
                 )}
               </Menu.Item>
             </Menu>
@@ -88,11 +114,13 @@ class Index extends React.Component {
         </Header>
         <Content style={{ padding: '0 50px' }} id="content">
           <Breadcrumb style={{ margin: '16px 0' }}></Breadcrumb>
-          <div style={{ background: '#fff', padding: 24, height: '100%' }}>
+          <div style={{ background: '#fff', padding: 24, height: '100%', minHeight: 380 }}>
             {this.props.children}
           </div>
         </Content>
-        <Footer style={{ textAlign: 'center', marginBottom: 0 }}>©2018 Created by suyu</Footer>
+        <Footer className={HeaderCss.footer} style={{ textAlign: 'center' }}>
+          ©2018 Created by suyu
+        </Footer>
       </Layout>
     );
   }

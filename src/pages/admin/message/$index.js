@@ -13,11 +13,13 @@ import {
   Button,
   Form,
   Modal,
+  Row,
+  Col,
 } from 'antd';
 import { connect } from 'dva';
 import router from 'umi/router';
 import Link from 'umi/link';
-const { TextArea } = Input;
+const { TextArea, Search } = Input;
 const { Option } = Select;
 
 const data = [];
@@ -35,8 +37,6 @@ class Index extends React.Component {
       message.loading('请登录', 0.5);
       router.push('/');
     }
-    // console.log(typeof localStorage.getItem('status'));
-
     if (localStorage.getItem('status') !== '1') {
       message.loading('请用管理员账号登录', 0.5);
       router.push('/');
@@ -44,7 +44,17 @@ class Index extends React.Component {
   }
 
   onChange = e => {
-    router.push(`/admin/message/${e}`);
+    const { location } = this.props;
+    if (JSON.stringify(location.query) == '{}') {
+      router.push(`/admin/message/${e}`);
+    } else {
+      router.push(`/admin/message/${e}${location.search}`);
+    }
+  };
+
+  onSearch = e => {
+    if (e == '') router.push(router.push(`/admin/message/1`));
+    else router.push(`/admin/message/1?name=${e}`);
   };
 
   confirm = mid => {
@@ -197,9 +207,17 @@ class Index extends React.Component {
     return (
       <div>
         <div>
-          <Button type="primary" onClick={this.showModal}>
-            增加文章
-          </Button>
+          <Row>
+            <Col span={2}>
+              <Button type="primary" onClick={this.showModal}>
+                增加文章
+              </Button>
+            </Col>
+            <Col span={6}>
+              <Search placeholder="输入文章名" onSearch={this.onSearch} enterButton />
+            </Col>
+          </Row>
+
           <Table
             pagination={false}
             loading={loading}
