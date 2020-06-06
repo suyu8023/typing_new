@@ -19,6 +19,7 @@ import {
 import { connect } from 'dva';
 import router from 'umi/router';
 import Link from 'umi/link';
+import ExcelUtil from '../../../util/excelUtil';
 const { TextArea, Search } = Input;
 const { Option } = Select;
 
@@ -216,6 +217,26 @@ class Index extends React.Component {
             </Col>
             <Col span={6}>
               <Search placeholder="输入用户名" onSearch={this.onSearch} enterButton />
+            </Col>
+            <Col span={1}>
+              <Button icon="plus" style={{ float: 'right' }}>
+                import
+                <Input
+                  type="file"
+                  accept=".xlsx, .xls"
+                  style={{
+                    opacity: 0,
+                    width: '100%',
+                    height: '100%',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                  }}
+                  onChange={e => {
+                    ExcelUtil.importExcel(e);
+                  }}
+                />
+              </Button>
             </Col>
           </Row>
 

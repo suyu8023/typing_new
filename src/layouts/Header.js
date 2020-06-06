@@ -44,7 +44,7 @@ class Index extends React.Component {
               <Menu.Item key="rank">
                 <Link to="/rank/1">Rank</Link>
               </Menu.Item>
-              <Menu.Item
+              {/* <Menu.Item
                 key="reg"
                 className={HeaderCss.right}
                 style={{ float: 'right', backgroundColor: 'write' }}
@@ -62,14 +62,14 @@ class Index extends React.Component {
                     退出
                   </Link>
                 )}
-              </Menu.Item>
-              <Menu.Item key="login" style={{ float: 'right', backgroundColor: 'write' }}>
+              </Menu.Item> */}
+              {/* <Menu.Item key="login" style={{ float: 'right', backgroundColor: 'write' }}>
                 {sessionStorage.getItem('username') === null ? (
                   <Link to="/login">登录</Link>
                 ) : (
                   <a>{localStorage.getItem('username')}</a>
                 )}
-              </Menu.Item>
+              </Menu.Item> */}
             </Menu>
           ) : (
             <Menu
@@ -112,14 +112,22 @@ class Index extends React.Component {
             </Menu>
           )}
         </Header>
-        <Content style={{ padding: '0 50px' }} id="content">
+        <Content id="content">
           <Breadcrumb style={{ margin: '16px 0' }}></Breadcrumb>
-          <div style={{ background: '#fff', padding: 24, height: '100%', minHeight: 380 }}>
+          <div
+            className={'responsive'}
+            style={{
+              background: '#fff',
+              padding: 24,
+              height: '100%',
+              minHeight: 380,
+            }}
+          >
             {this.props.children}
           </div>
         </Content>
         <Footer className={HeaderCss.footer} style={{ textAlign: 'center' }}>
-          ©2018 Created by suyu
+          ©2020 Created by suyu
         </Footer>
       </Layout>
     );

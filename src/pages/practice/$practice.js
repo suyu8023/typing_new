@@ -91,23 +91,30 @@ class Index extends React.Component {
           </Col>
         </Row>
 
-        <div>
-          <Table
-            pagination={false}
-            loading={loading}
-            columns={columns}
-            dataSource={MessageList}
-            rowKey="mid"
-          />
-          <div style={{ float: 'right', marginTop: 10 }}>
-            <Pagination
-              showQuickJumper
-              defaultCurrent={page}
-              total={num}
-              onChange={page => this.onChange(page)}
+        <Row>
+          <Col span={24}>
+            <Table
+              className="responsive-table"
+              pagination={false}
+              loading={loading}
+              columns={columns}
+              dataSource={MessageList}
+              rowKey="mid"
             />
-          </div>
-        </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <div style={{ float: 'right', marginTop: 10 }}>
+              <Pagination
+                showQuickJumper
+                defaultCurrent={page}
+                total={num}
+                onChange={page => this.onChange(page)}
+              />
+            </div>
+          </Col>
+        </Row>
       </div>
     );
   }
