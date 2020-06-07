@@ -217,22 +217,30 @@ class Index extends React.Component {
               <Search placeholder="输入文章名" onSearch={this.onSearch} enterButton />
             </Col>
           </Row>
-
-          <Table
-            pagination={false}
-            loading={loading}
-            columns={columns}
-            dataSource={MessageList}
-            rowKey="mid"
-          />
-          <div style={{ float: 'right', marginTop: 10 }}>
-            <Pagination
-              showQuickJumper
-              defaultCurrent={page}
-              total={num}
-              onChange={page => this.onChange(page)}
-            />
-          </div>
+          <Row>
+            <Col span={24}>
+              <Table
+                className="responsive-table"
+                pagination={false}
+                loading={loading}
+                columns={columns}
+                dataSource={MessageList}
+                rowKey="mid"
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <div style={{ float: 'right', marginTop: 10 }}>
+                <Pagination
+                  showQuickJumper
+                  defaultCurrent={page}
+                  total={num}
+                  onChange={page => this.onChange(page)}
+                />
+              </div>
+            </Col>
+          </Row>
         </div>
         <Modal
           title="增加文章"

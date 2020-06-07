@@ -108,6 +108,15 @@ class Index extends React.Component {
     });
   };
 
+  pri = e => {
+    console.log('qwqwqwqw');
+  };
+
+  onExcel(e) {
+    let data = ExcelUtil.importExcel(this.pri, e);
+    // console.log(data);
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -218,7 +227,7 @@ class Index extends React.Component {
             <Col span={6}>
               <Search placeholder="输入用户名" onSearch={this.onSearch} enterButton />
             </Col>
-            <Col span={1}>
+            <Col span={2}>
               <Button icon="plus" style={{ float: 'right' }}>
                 import
                 <Input
@@ -233,28 +242,36 @@ class Index extends React.Component {
                     left: 0,
                   }}
                   onChange={e => {
-                    ExcelUtil.importExcel(e);
+                    this.onExcel(e);
                   }}
                 />
               </Button>
             </Col>
           </Row>
-
-          <Table
-            pagination={false}
-            loading={loading}
-            columns={columns}
-            dataSource={UserList}
-            rowKey="mid"
-          />
-          <div style={{ float: 'right', marginTop: 10 }}>
-            <Pagination
-              showQuickJumper
-              defaultCurrent={page}
-              total={num}
-              onChange={page => this.onChange(page)}
-            />
-          </div>
+          <Row>
+            <Col span={24}>
+              <Table
+                className="responsive-table"
+                pagination={false}
+                loading={loading}
+                columns={columns}
+                dataSource={UserList}
+                rowKey="mid"
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <div style={{ float: 'right', marginTop: 10 }}>
+                <Pagination
+                  showQuickJumper
+                  defaultCurrent={page}
+                  total={num}
+                  onChange={page => this.onChange(page)}
+                />
+              </div>
+            </Col>
+          </Row>
         </div>
         <Modal
           title="增加用户"

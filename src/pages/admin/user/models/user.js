@@ -1,5 +1,6 @@
 import * as service from '../services/user';
 import { message } from 'antd';
+import ExcelUtil from '../../../../util/excelUtil';
 export default {
   namespace: 'user',
 
@@ -33,6 +34,10 @@ export default {
       let { data } = yield call(service.addUser, params);
       if (data.success == true) message.success('添加成功');
       else message.success(data.msg);
+    },
+    *excel({ payload: params }, { call, put }) {
+      let data = yield ExcelUtil.importExcel(params);
+      console.log(data);
     },
   },
 

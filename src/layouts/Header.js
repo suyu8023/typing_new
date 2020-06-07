@@ -44,7 +44,7 @@ class Index extends React.Component {
               <Menu.Item key="rank">
                 <Link to="/rank/1">Rank</Link>
               </Menu.Item>
-              {/* <Menu.Item
+              <Menu.Item
                 key="reg"
                 className={HeaderCss.right}
                 style={{ float: 'right', backgroundColor: 'write' }}
@@ -62,14 +62,14 @@ class Index extends React.Component {
                     退出
                   </Link>
                 )}
-              </Menu.Item> */}
-              {/* <Menu.Item key="login" style={{ float: 'right', backgroundColor: 'write' }}>
+              </Menu.Item>
+              <Menu.Item key="login" style={{ float: 'right', backgroundColor: 'write' }}>
                 {sessionStorage.getItem('username') === null ? (
                   <Link to="/login">登录</Link>
                 ) : (
                   <a>{localStorage.getItem('username')}</a>
                 )}
-              </Menu.Item> */}
+              </Menu.Item>
             </Menu>
           ) : (
             <Menu
