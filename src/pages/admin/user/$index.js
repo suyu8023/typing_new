@@ -15,6 +15,7 @@ import {
   Modal,
   Row,
   Col,
+  Spin,
 } from 'antd';
 import { connect } from 'dva';
 import router from 'umi/router';
@@ -30,6 +31,8 @@ class Index extends React.Component {
     super(props);
     this.state = {
       visible: false,
+      loading: false,
+      data: [],
     };
   }
 
@@ -108,14 +111,28 @@ class Index extends React.Component {
     });
   };
 
-  pri = e => {
-    console.log('qwqwqwqw');
+  pri = (data, flag) => {
+    this.setState({
+      data: data,
+      loading: flag ? !this.state.loading : this.state.loading,
+    });
   };
 
-  onExcel(e) {
-    let data = ExcelUtil.importExcel(this.pri, e);
-    // console.log(data);
-  }
+  onExcel = e => {
+    ExcelUtil.importExcel(this.pri, e, 'user');
+  };
+
+  upExcel = e => {
+    const { dispatch } = this.props;
+    if (this.state.data.length != 0) {
+      console.log(this.state.data);
+
+      dispatch({
+        type: 'user/addUserList',
+        payload: this.state.data,
+      });
+    }
+  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -215,63 +232,71 @@ class Index extends React.Component {
     if (UserList === undefined || UserList.length === 0) {
       num = 0;
     }
+
     return (
       <div>
         <div>
-          <Row>
-            <Col span={2}>
-              <Button type="primary" onClick={this.showModal}>
-                增加用户
-              </Button>
-            </Col>
-            <Col span={6}>
-              <Search placeholder="输入用户名" onSearch={this.onSearch} enterButton />
-            </Col>
-            <Col span={2}>
-              <Button icon="plus" style={{ float: 'right' }}>
-                import
-                <Input
-                  type="file"
-                  accept=".xlsx, .xls"
-                  style={{
-                    opacity: 0,
-                    width: '100%',
-                    height: '100%',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                  }}
-                  onChange={e => {
-                    this.onExcel(e);
-                  }}
+          <Spin spinning={this.state.loading} tip="文件上传中......">
+            <Row>
+              <Col span={2}>
+                <Button type="primary" onClick={this.showModal}>
+                  增加用户
+                </Button>
+              </Col>
+              <Col span={6}>
+                <Search placeholder="输入用户名" onSearch={this.onSearch} enterButton />
+              </Col>
+              <Col span={2}>
+                <Button icon="plus" style={{ float: 'right' }}>
+                  import
+                  <Input
+                    type="file"
+                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                    style={{
+                      opacity: 0,
+                      width: '100%',
+                      height: '100%',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                    }}
+                    onChange={e => {
+                      this.onExcel(e);
+                    }}
+                  />
+                </Button>
+              </Col>
+              <Col span={2} style={{ textAlign: 'center' }}>
+                <Button type="primary" onClick={this.upExcel}>
+                  导入
+                </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24}>
+                <Table
+                  className="responsive-table"
+                  pagination={false}
+                  loading={loading}
+                  columns={columns}
+                  dataSource={UserList}
+                  rowKey="mid"
                 />
-              </Button>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <Table
-                className="responsive-table"
-                pagination={false}
-                loading={loading}
-                columns={columns}
-                dataSource={UserList}
-                rowKey="mid"
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <div style={{ float: 'right', marginTop: 10 }}>
-                <Pagination
-                  showQuickJumper
-                  defaultCurrent={page}
-                  total={num}
-                  onChange={page => this.onChange(page)}
-                />
-              </div>
-            </Col>
-          </Row>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24}>
+                <div style={{ float: 'right', marginTop: 10 }}>
+                  <Pagination
+                    showQuickJumper
+                    defaultCurrent={page}
+                    total={num}
+                    onChange={page => this.onChange(page)}
+                  />
+                </div>
+              </Col>
+            </Row>
+          </Spin>
         </div>
         <Modal
           title="增加用户"

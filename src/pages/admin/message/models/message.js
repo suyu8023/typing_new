@@ -25,7 +25,6 @@ export default {
     },
     *deleteMessage({ payload: params }, { call, put }) {
       let { data } = yield call(service.deleteMessage, params.obj);
-      yield put({ type: 'getUserNum' });
       yield put({
         type: 'getMessageList',
         payload: {
@@ -37,6 +36,9 @@ export default {
 
     *addMessage({ payload: params }, { call, put }) {
       let { data } = yield call(service.addMessage, params);
+    },
+    *addMessageList({ payload: params }, { call, put }) {
+      let { data } = yield call(service.addMessageList, params);
     },
   },
 

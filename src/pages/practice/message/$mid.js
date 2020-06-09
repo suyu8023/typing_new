@@ -17,6 +17,11 @@ let true_num1;
 let true_num2 = 0;
 let line_data = '';
 let qtime = 0;
+let back_num = 0;
+let ch = new Array(53).fill(0);
+let ch1 = new Array(53).fill(0);
+const A = /^[A-Z]+$/;
+const a = /^[a-z]+$/;
 function handleClick(e) {
   e.preventDefault();
 }
@@ -77,7 +82,14 @@ class List1 extends React.Component {
     wrong_num1 = 0;
     true_num1 = 0;
     true_num2 = 0;
+    back_num = 0;
   }
+
+  onkeyDown = e => {
+    if (counttime && e.keyCode == 8) {
+      back_num++;
+    }
+  };
 
   oninput = e => {
     if (counttime === false) {
@@ -99,6 +111,7 @@ class List1 extends React.Component {
     if (j >= 0 && j < this.state.value.length + 1) {
       wrong_num1 = 0;
       true_num1 = 0;
+      ch1 = new Array(53).fill(0);
       let data = this.state.value;
       for (let k = 0; k < data.length; k++) {
         if (j > k) {
@@ -108,6 +121,12 @@ class List1 extends React.Component {
           } else {
             data[k].color = 'red';
             wrong_num1++;
+            if (A.test(data[k].value)) {
+              ch1[data[k].value.charCodeAt() - 'A'.charCodeAt() + 26]++;
+            }
+            if (a.test(data[k].value)) {
+              ch1[data[k].value.charCodeAt() - 'a'.charCodeAt()]++;
+            }
           }
         } else {
           data[k].color = '';
@@ -117,6 +136,7 @@ class List1 extends React.Component {
       document.getElementById('num').innerText = num + true_num1 + wrong_num1;
       document.getElementById('true_num').innerText = true_num + true_num1;
       document.getElementById('wrong_num').innerText = wrong_num + wrong_num1;
+      document.getElementById('back_num').innerText = back_num;
       document.getElementById('correct_rate').innerText =
         (((true_num + true_num1) / (num + true_num1 + wrong_num1)) * 100).toFixed(2) + '%';
       this.setState({
@@ -132,9 +152,12 @@ class List1 extends React.Component {
       document.getElementById('num').innerText = num;
       document.getElementById('true_num').innerText = true_num + true_num1;
       document.getElementById('wrong_num').innerText = wrong_num + wrong_num1;
+      document.getElementById('back_num').innerText = back_num;
       document.getElementById('correct_rate').innerText =
         (((true_num + true_num1) / num) * 100).toFixed(2) + '%';
-
+      for (let i = 0; i < 53; i++) {
+        ch[i] += ch1[i];
+      }
       this.props.bark(nextIndex);
     }
   };
@@ -158,13 +181,16 @@ class List1 extends React.Component {
           })}
         </div>
         <input
+          type="text"
           onPaste={handleClick}
           onContextMenu={handleClick}
           onCopy={handleClick}
           onCut={handleClick}
+          autoComplete="off"
           className={CSS.write}
           id={'read' + index}
           onChange={item => this.oninput(item)}
+          onKeyDown={this.onkeyDown}
           {...disable}
           ref={ref => (this.input = ref)}
         />
@@ -215,66 +241,86 @@ class ShowMessage extends React.Component {
     } else if (speed >= 110.0 && correct_rate >= 95.0) {
       str = '及格,继续努力!';
     }
-    let obj =
-      '{' +
-      '"uid":' +
-      '"' +
-      localStorage.getItem('uid') +
-      '",' +
-      '"mid":' +
-      '"' +
-      this.props.location.pathname.split('/')[3] +
-      '",' +
-      '"username":' +
-      '"' +
-      localStorage.getItem('username') +
-      '",' +
-      '"nickname":' +
-      '"' +
-      localStorage.getItem('nickname') +
-      '",' +
-      '"speed":' +
-      '"' +
-      speed +
-      '",' +
-      '"correct_rate":' +
-      '"' +
-      correct_rate +
-      '",' +
-      '"wordnum":' +
-      '"' +
-      num +
-      '",' +
-      '"wrtime":' +
-      '"' +
-      time +
-      '",' +
-      '"instan":' +
-      '"' +
-      '[' +
-      line_data +
-      ']' +
-      '",' +
-      '"grade":' +
-      '"' +
-      str +
-      '",' +
-      '"mesname":' +
-      '"' +
-      this.props.Mename +
-      '"' +
-      // mid: this.props.location.pathname.split('/')[3],
-      // username: localStorage.getItem('username'),
-      // nickname: localStorage.getItem('nickname'),
-      // speed: speed,
-      // correct_rate: correct_rate,
-      // wordnum: num,
-      // wrtime: time,
-      // instan: line_data,
-      // grade: str,
-      '}';
+    let obj = {
+      status: {
+        uid: localStorage.getItem('uid'),
+        mid: this.props.location.pathname.split('/')[3],
+        username: localStorage.getItem('username'),
+        nickname: localStorage.getItem('nickname'),
+        speed: speed,
+        correct_rate: correct_rate,
+        wordnum: num,
+        wrtime: time,
+        instan: '[' + line_data + ']',
+        grade: str,
+        mesname: this.props.Mename,
+        backnum: back_num,
+      },
+      ch: {
+        uid: localStorage.getItem('uid'),
+        ch: ch.join(','),
+      },
+    };
+    // let obj =
+    //   '{' +
+    //   '"uid":' +
+    //   '"' +
+    //   localStorage.getItem('uid') +
+    //   '",' +
+    //   '"mid":' +
+    //   '"' +
+    //   this.props.location.pathname.split('/')[3] +
+    //   '",' +
+    //   '"username":' +
+    //   '"' +
+    //   localStorage.getItem('username') +
+    //   '",' +
+    //   '"nickname":' +
+    //   '"' +
+    //   localStorage.getItem('nickname') +
+    //   '",' +
+    //   '"speed":' +
+    //   '"' +
+    //   speed +
+    //   '",' +
+    //   '"correct_rate":' +
+    //   '"' +
+    //   correct_rate +
+    //   '",' +
+    //   '"wordnum":' +
+    //   '"' +
+    //   num +
+    //   '",' +
+    //   '"wrtime":' +
+    //   '"' +
+    //   time +
+    //   '",' +
+    //   '"instan":' +
+    //   '"' +
+    //   '[' +
+    //   line_data +
+    //   ']' +
+    //   '",' +
+    //   '"grade":' +
+    //   '"' +
+    //   str +
+    //   '",' +
+    //   '"mesname":' +
+    //   '"' +
+    //   this.props.Mename +
+    //   '"' +
+    //   // mid: this.props.location.pathname.split('/')[3],
+    //   // username: localStorage.getItem('username'),
+    //   // nickname: localStorage.getItem('nickname'),
+    //   // speed: speed,
+    //   // correct_rate: correct_rate,
+    //   // wordnum: num,
+    //   // wrtime: time,
+    //   // instan: line_data,
+    //   // grade: str,
+    //   '}';
     // console.log(obj);
-    obj = JSON.parse(obj);
+    // obj = JSON.parse(obj);
     // console.log(obj);
     const { dispatch } = this.props;
     dispatch({
@@ -317,6 +363,10 @@ class ShowMessage extends React.Component {
         <span style={{ fontSize: 30 }}>
           {' '}
           错误字数:<span id="wrong_num">0</span>
+        </span>
+        <span style={{ fontSize: 30 }}>
+          {' '}
+          退格字数:<span id="back_num">0</span>
         </span>
         <span style={{ float: 'right' }}>
           <Button type="primary" onClick={this.handleSub}>

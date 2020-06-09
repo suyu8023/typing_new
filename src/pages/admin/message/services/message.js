@@ -29,3 +29,12 @@ export function addMessage(params) {
     body: JSON.stringify(params),
   });
 }
+export function addMessageList(params) {
+  return request(`../../api/message/createList`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(params),
+  });
+}

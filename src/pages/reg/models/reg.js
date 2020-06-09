@@ -15,39 +15,28 @@ export default {
       if (Username.data.success === true) {
         message.error('用户名已存在');
       } else {
-        const User = yield call(service.reg, params);
-        if (parseInt(User.data.success) === 200) {
-          message.success('注册成功,请登录!');
-          router.push(`/login`);
+        const judge = yield call(service.judge, params.email, params.code);
+        if (judge.data.success === true) {
+          const User = yield call(service.reg, params);
+          if (User.data.success === true) {
+            message.success('注册成功,请登录!');
+            router.push(`/login`);
+          } else {
+            message.error('注册失败');
+          }
         } else {
-          message.err('注册失败');
+          message.error('验证码和邮箱不匹配');
         }
       }
     },
     *code({ payload: params }, { call, put }) {
       const data = yield call(service.email, params);
       if (data.data.success) {
-        yield put({
-          type: 'saveCode',
-          payload: {
-            data: data,
-          },
-        });
         message.success('验证码发送成功');
       }
     },
   },
 
-  reducers: {
-    saveCode(
-      state,
-      {
-        payload: { data: result },
-      },
-    ) {
-      const Code = result.data.data;
-      return { ...state, Code };
-    },
-  },
+  reducers: {},
   subscriptions: {},
 };

@@ -29,3 +29,13 @@ export function addUser(params) {
     body: JSON.stringify(params),
   });
 }
+
+export function addUserList(params) {
+  return request(`../../api/user/createList`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(params),
+  });
+}

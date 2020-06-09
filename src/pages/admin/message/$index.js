@@ -15,12 +15,14 @@ import {
   Modal,
   Row,
   Col,
+  Spin,
 } from 'antd';
 import { connect } from 'dva';
 import router from 'umi/router';
 import Link from 'umi/link';
 const { TextArea, Search } = Input;
 const { Option } = Select;
+import ExcelUtil from '../../../util/excelUtil';
 
 const data = [];
 
@@ -29,6 +31,7 @@ class Index extends React.Component {
     super(props);
     this.state = {
       visible: false,
+      loading: false,
     };
   }
 
@@ -104,6 +107,29 @@ class Index extends React.Component {
         // console.log('Received values of form: ', values);
       }
     });
+  };
+
+  pri = (data, flag) => {
+    this.setState({
+      data: data,
+      loading: flag ? !this.state.loading : this.state.loading,
+    });
+  };
+
+  onExcel = e => {
+    ExcelUtil.importExcel(this.pri, e, 'message');
+  };
+
+  upExcel = e => {
+    const { dispatch } = this.props;
+    if (this.state.data.length != 0) {
+      console.log(this.state.data);
+
+      dispatch({
+        type: 'message/addMessageList',
+        payload: this.state.data,
+      });
+    }
   };
 
   render() {
@@ -207,40 +233,68 @@ class Index extends React.Component {
     return (
       <div>
         <div>
-          <Row>
-            <Col span={2}>
-              <Button type="primary" onClick={this.showModal}>
-                增加文章
-              </Button>
-            </Col>
-            <Col span={6}>
-              <Search placeholder="输入文章名" onSearch={this.onSearch} enterButton />
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <Table
-                className="responsive-table"
-                pagination={false}
-                loading={loading}
-                columns={columns}
-                dataSource={MessageList}
-                rowKey="mid"
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <div style={{ float: 'right', marginTop: 10 }}>
-                <Pagination
-                  showQuickJumper
-                  defaultCurrent={page}
-                  total={num}
-                  onChange={page => this.onChange(page)}
+          <Spin spinning={this.state.loading} tip="文件上传中......">
+            <Row>
+              <Col span={2}>
+                <Button type="primary" onClick={this.showModal}>
+                  增加文章
+                </Button>
+              </Col>
+              <Col span={6}>
+                <Search placeholder="输入文章名" onSearch={this.onSearch} enterButton />
+              </Col>
+              <Col span={2}>
+                <Button icon="plus" style={{ float: 'right' }}>
+                  import
+                  <Input
+                    type="file"
+                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                    style={{
+                      opacity: 0,
+                      width: '100%',
+                      height: '100%',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                    }}
+                    onChange={e => {
+                      this.onExcel(e);
+                    }}
+                  />
+                </Button>
+              </Col>
+              <Col span={2} style={{ textAlign: 'center' }}>
+                <Button type="primary" onClick={this.upExcel}>
+                  导入
+                </Button>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col span={24}>
+                <Table
+                  className="responsive-table"
+                  pagination={false}
+                  loading={loading}
+                  columns={columns}
+                  dataSource={MessageList}
+                  rowKey="mid"
                 />
-              </div>
-            </Col>
-          </Row>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24}>
+                <div style={{ float: 'right', marginTop: 10 }}>
+                  <Pagination
+                    showQuickJumper
+                    defaultCurrent={page}
+                    total={num}
+                    onChange={page => this.onChange(page)}
+                  />
+                </div>
+              </Col>
+            </Row>
+          </Spin>
         </div>
         <Modal
           title="增加文章"

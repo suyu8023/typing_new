@@ -67,7 +67,9 @@ class Index extends React.Component {
                 {sessionStorage.getItem('username') === null ? (
                   <Link to="/login">登录</Link>
                 ) : (
-                  <a>{localStorage.getItem('username')}</a>
+                  <Link to={`/user/${localStorage.getItem('username')}`}>
+                    {localStorage.getItem('username')}
+                  </Link>
                 )}
               </Menu.Item>
             </Menu>

@@ -20,7 +20,9 @@
     "nodemailer": "2.5.0",
     "pg-hstore": "^2.3.3",
     "react": "^16.8.6",
+    "react-calendar-heatmap": "^1.8.1",
     "react-dom": "^16.8.6",
+    "react-tooltip": "^4.2.6",
     "react-virtualized": "^9.21.1",
     "sequelize": "^5.21.11",
     "xlsx": "^0.16.2"

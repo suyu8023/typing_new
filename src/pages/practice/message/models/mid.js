@@ -17,7 +17,10 @@ export default {
       });
     },
     *subPractice({ payload: params }, { call, put }) {
-      let { data } = yield call(service.subPractice, params);
+      console.log(params);
+
+      let { data } = yield call(service.subPractice, params.status);
+      let result = yield call(service.subCh, params.ch);
       // yield put({
       //   type: 'saveMessage',
       //   payload: {

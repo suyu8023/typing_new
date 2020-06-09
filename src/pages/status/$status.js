@@ -124,6 +124,12 @@ class Index extends React.Component {
         key: 'wordnum',
       },
       {
+        title: '退格总数',
+        dataIndex: 'backname',
+        key: 'backname',
+      },
+
+      {
         title: '打字时间',
         dataIndex: 'wrtime',
         key: 'wrtime',
@@ -244,6 +250,15 @@ class Index extends React.Component {
                 stroke: '#fff',
                 lineWidth: 1,
               }}
+              tooltip={[
+                'x*y',
+                (x, y) => {
+                  return {
+                    name: '速度',
+                    value: y + 'KPM',
+                  };
+                },
+              ]}
             />
           </Chart>
         </Modal>
