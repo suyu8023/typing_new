@@ -4,7 +4,7 @@ import CSS from './mid.css';
 import { connect } from 'dva';
 import { List } from 'react-virtualized';
 import router from 'umi/router';
-import { message, Spin, Button } from 'antd';
+import { message, Spin, Button, Input } from 'antd';
 
 let hei = 0;
 let flag = -1;
@@ -20,6 +20,7 @@ let qtime = 0;
 let back_num = 0;
 let ch = new Array(53).fill(0);
 let ch1 = new Array(53).fill(0);
+let ch2 = new Array(53).fill(0);
 const A = /^[A-Z]+$/;
 const a = /^[a-z]+$/;
 function handleClick(e) {
@@ -95,6 +96,19 @@ class List1 extends React.Component {
     if (counttime === false) {
       this.countTime();
       counttime = true;
+      if (localStorage.getItem('ch') == '') {
+        ch2 = JSON.parse(JSON.stringify(ch));
+      } else {
+        ch = JSON.parse(
+          JSON.stringify(
+            localStorage
+              .getItem('ch')
+              .split(',')
+              .map(Number),
+          ),
+        );
+        ch2 = JSON.parse(JSON.stringify(ch));
+      }
     }
     let i = parseInt(e.target.id.slice(4));
     if (i >= 3 && flag != i) {
@@ -112,11 +126,12 @@ class List1 extends React.Component {
       wrong_num1 = 0;
       true_num1 = 0;
       ch1 = new Array(53).fill(0);
+      ch = JSON.parse(JSON.stringify(ch2));
       let data = this.state.value;
       for (let k = 0; k < data.length; k++) {
         if (j > k) {
           if (value[k] === data[k].value) {
-            data[k].color = 'green';
+            data[k].color = '#4fb24f';
             true_num1++;
           } else {
             data[k].color = 'red';
@@ -139,6 +154,9 @@ class List1 extends React.Component {
       document.getElementById('back_num').innerText = back_num;
       document.getElementById('correct_rate').innerText =
         (((true_num + true_num1) / (num + true_num1 + wrong_num1)) * 100).toFixed(2) + '%';
+      for (let i = 0; i < 53; i++) {
+        ch[i] += ch1[i];
+      }
       this.setState({
         value: data,
       });
@@ -155,9 +173,11 @@ class List1 extends React.Component {
       document.getElementById('back_num').innerText = back_num;
       document.getElementById('correct_rate').innerText =
         (((true_num + true_num1) / num) * 100).toFixed(2) + '%';
+      ch = JSON.parse(JSON.stringify(ch2));
       for (let i = 0; i < 53; i++) {
         ch[i] += ch1[i];
       }
+      ch2 = JSON.parse(JSON.stringify(ch));
       this.props.bark(nextIndex);
     }
   };
@@ -261,79 +281,15 @@ class ShowMessage extends React.Component {
         ch: ch.join(','),
       },
     };
-    // let obj =
-    //   '{' +
-    //   '"uid":' +
-    //   '"' +
-    //   localStorage.getItem('uid') +
-    //   '",' +
-    //   '"mid":' +
-    //   '"' +
-    //   this.props.location.pathname.split('/')[3] +
-    //   '",' +
-    //   '"username":' +
-    //   '"' +
-    //   localStorage.getItem('username') +
-    //   '",' +
-    //   '"nickname":' +
-    //   '"' +
-    //   localStorage.getItem('nickname') +
-    //   '",' +
-    //   '"speed":' +
-    //   '"' +
-    //   speed +
-    //   '",' +
-    //   '"correct_rate":' +
-    //   '"' +
-    //   correct_rate +
-    //   '",' +
-    //   '"wordnum":' +
-    //   '"' +
-    //   num +
-    //   '",' +
-    //   '"wrtime":' +
-    //   '"' +
-    //   time +
-    //   '",' +
-    //   '"instan":' +
-    //   '"' +
-    //   '[' +
-    //   line_data +
-    //   ']' +
-    //   '",' +
-    //   '"grade":' +
-    //   '"' +
-    //   str +
-    //   '",' +
-    //   '"mesname":' +
-    //   '"' +
-    //   this.props.Mename +
-    //   '"' +
-    //   // mid: this.props.location.pathname.split('/')[3],
-    //   // username: localStorage.getItem('username'),
-    //   // nickname: localStorage.getItem('nickname'),
-    //   // speed: speed,
-    //   // correct_rate: correct_rate,
-    //   // wordnum: num,
-    //   // wrtime: time,
-    //   // instan: line_data,
-    //   // grade: str,
-    //   '}';
-    // console.log(obj);
-    // obj = JSON.parse(obj);
-    // console.log(obj);
     const { dispatch } = this.props;
     dispatch({
       type: 'mid/subPractice',
       payload: obj,
     });
-    router.push('/status/1');
   };
 
   render() {
     let date = this.props.date;
-    console.log(this.props);
-
     // let input = this.props.in;
 
     return (

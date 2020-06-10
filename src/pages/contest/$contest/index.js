@@ -70,7 +70,7 @@ const columns = [
     dataIndex: '',
     key: '',
     render: text => {
-      console.log(chinaTime('YYYY-MM-DD HH:mm:ss') > text.begin_time);
+      // console.log(chinaTime('YYYY-MM-DD HH:mm:ss') > text.begin_time);
 
       if (
         chinaTime('YYYY-MM-DD HH:mm:ss') >= text.begin_time &&

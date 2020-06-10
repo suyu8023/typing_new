@@ -14,6 +14,21 @@ export default {
         },
       });
     },
+    *getUserContestRankList({ payload: params }, { call, put }) {
+      let { data } = yield call(
+        service.getUserContestRankList,
+        params.cid,
+        params.page,
+        params.limit,
+        params.username,
+      );
+      yield put({
+        type: 'saveContestRankList',
+        payload: {
+          data: data,
+        },
+      });
+    },
   },
 
   reducers: {
@@ -40,20 +55,26 @@ export default {
             list[1] === 'contest' &&
             list[3] !== 'message'
           ) {
-            dispatch({
-              type: 'getContestRankNum',
-              payload: {
-                cid: parseInt(list[2]),
-              },
-            });
-            dispatch({
-              type: 'getContestRankList',
-              payload: {
-                cid: parseInt(list[2]),
-                page: parseInt(list[4]),
-                limit: 10,
-              },
-            });
+            if (JSON.stringify(query) == '{}') {
+              dispatch({
+                type: 'getContestRankList',
+                payload: {
+                  cid: parseInt(list[2]),
+                  page: parseInt(list[4]),
+                  limit: 10,
+                },
+              });
+            } else {
+              dispatch({
+                type: 'getUserContestRankList',
+                payload: {
+                  cid: parseInt(list[2]),
+                  page: parseInt(list[4]),
+                  limit: 10,
+                  username: query.name,
+                },
+              });
+            }
           }
         }
       });

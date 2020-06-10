@@ -46,8 +46,6 @@ export default {
       return history.listen(({ pathname, query }) => {
         let list = pathname.split('/');
 
-        console.log(query);
-
         if (list.length === 3) {
           let reg = /^\d+$/;
           if (reg.test(list[2]) && list[1] === 'practice') {

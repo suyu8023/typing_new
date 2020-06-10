@@ -54,7 +54,6 @@ export default {
       },
     ) {
       const Message = result.data;
-      console.log(Message);
 
       // const Message = result[0].message;
       // const diff = result[0].diff;
@@ -68,8 +67,6 @@ export default {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
         let list = pathname.split('/');
-        console.log(list);
-
         if (list.length === 5) {
           let reg = /^\d+$/;
           if (

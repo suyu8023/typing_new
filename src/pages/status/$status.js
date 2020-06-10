@@ -5,6 +5,7 @@ import { Table, Divider, Tag, Pagination, Modal, Button, message, Input, Row, Co
 import { connect } from 'dva';
 import router from 'umi/router';
 import { Chart, Geom, Axis, Tooltip } from 'bizcharts';
+import Link from 'umi/link';
 const { Search } = Input;
 
 class Index extends React.Component {
@@ -77,18 +78,27 @@ class Index extends React.Component {
       },
       {
         title: '用户名',
-        dataIndex: 'username',
-        key: 'username',
+        dataIndex: '',
+        key: '',
+        render: text => {
+          return <Link to={`/status/1?name=${text.username}`}>{text.username}</Link>;
+        },
       },
       {
         title: '昵称',
-        dataIndex: 'nickname',
-        key: 'nickname',
+        dataIndex: '',
+        key: '',
+        render: text => {
+          return <Link to={`/status/1?name=${text.username}`}>{text.username}</Link>;
+        },
       },
       {
         title: '文章',
-        dataIndex: 'mesname',
-        key: 'mesname',
+        dataIndex: '',
+        key: '',
+        render: text => {
+          return <Link to={'/practice/message/' + text.mid}>{text.mesname}</Link>;
+        },
       },
       {
         title: '打字速度',
@@ -125,8 +135,8 @@ class Index extends React.Component {
       },
       {
         title: '退格总数',
-        dataIndex: 'backname',
-        key: 'backname',
+        dataIndex: 'backnum',
+        key: 'backnum',
       },
 
       {

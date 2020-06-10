@@ -89,14 +89,11 @@ class Index extends React.Component {
               <Menu.Item key="user">
                 <Link to="/admin/user/1">User</Link>
               </Menu.Item>
-              <Menu.Item key="login" style={{ marginLeft: '60%', backgroundColor: 'write' }}>
-                {sessionStorage.getItem('username') === null ? (
-                  <Link to="/login">登录</Link>
-                ) : (
-                  <a>{localStorage.getItem('username')}</a>
-                )}
-              </Menu.Item>
-              <Menu.Item key="reg">
+              <Menu.Item
+                key="reg"
+                className={HeaderCss.right}
+                style={{ float: 'right', backgroundColor: 'write' }}
+              >
                 {sessionStorage.getItem('username') === null ? (
                   <Link to="/reg">注册</Link>
                 ) : (
@@ -108,6 +105,15 @@ class Index extends React.Component {
                     }}
                   >
                     退出
+                  </Link>
+                )}
+              </Menu.Item>
+              <Menu.Item key="login" style={{ float: 'right', backgroundColor: 'write' }}>
+                {sessionStorage.getItem('username') === null ? (
+                  <Link to="/login">登录</Link>
+                ) : (
+                  <Link to={`/user/${localStorage.getItem('username')}`}>
+                    {localStorage.getItem('username')}
                   </Link>
                 )}
               </Menu.Item>

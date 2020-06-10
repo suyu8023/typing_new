@@ -1,21 +1,43 @@
 import * as service from '../services/contest_mid';
+import { clearExpiredStateProperties, genTimeFlag, isStateExpired } from '../../../../../util/misc';
+import router from 'umi/router';
+import { message } from 'antd';
 
+const initialState = {
+  detail: {},
+};
 export default {
   namespace: 'contest_mid',
 
-  state: {},
+  state: initialState,
   effects: {
-    *getMessage({ payload: params }, { call, put }) {
-      let { data } = yield call(service.getMessage, params.mid);
-      yield put({
-        type: 'saveMessage',
-        payload: {
-          data: data,
-        },
-      });
+    *getMessage({ payload: params }, { call, put, select }) {
+      const savedState = yield select(state => state.contest_mid.detail[params.mid]);
+      if (!isStateExpired(savedState)) {
+        yield put({
+          type: 'saveMessage',
+          payload: {
+            data: savedState,
+          },
+        });
+      } else {
+        let { data } = yield call(service.getMessage, params.mid);
+        yield put({
+          type: 'saveMessage',
+          payload: {
+            data: data,
+          },
+        });
+      }
     },
     *subContestPractice({ payload: params }, { call, put }) {
-      let { data } = yield call(service.subContestPractice, params);
+      let { data } = yield call(service.subContestPractice, params.status);
+      let result = yield call(service.subCh, params.ch);
+      if (data.success == true && result.data.success == true) {
+        message.success('提交成功');
+        localStorage.setItem('ch', params.ch.ch);
+        router.push(`/contest/${params.status.cid}/rank/1`);
+      }
     },
   },
 
@@ -28,6 +50,10 @@ export default {
     ) {
       const Message = result.data.message;
       const Mesname = result.data.name;
+      state.detail[result.data.mid] = {
+        ...result,
+        ...genTimeFlag(60 * 60 * 1000),
+      };
       return { ...state, Message, Mesname };
     },
   },

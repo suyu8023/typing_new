@@ -18,6 +18,7 @@ export default {
         localStorage.setItem('username', User.data.data.username);
         localStorage.setItem('nickname', User.data.data.nickname);
         localStorage.setItem('uid', User.data.data.uid);
+        localStorage.setItem('ch', User.data.data.ch);
         sessionStorage.setItem('username', User.data.data.username);
         // localStorage.setItem('time', Time.data.time)
         yield put({

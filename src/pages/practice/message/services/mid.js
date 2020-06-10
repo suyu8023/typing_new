@@ -9,7 +9,6 @@ export function getMessage(mid) {
 }
 
 export function subPractice(params) {
-  console.log(JSON.stringify(params));
   return request(`../../api/status/create`, {
     method: 'POST',
     headers: {
@@ -20,7 +19,6 @@ export function subPractice(params) {
 }
 
 export function subCh(params) {
-  console.log(JSON.stringify(params));
   return request(`../../api/user/update`, {
     method: 'POST',
     headers: {
