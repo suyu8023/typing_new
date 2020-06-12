@@ -36,10 +36,8 @@ export default {
       else message.success(data.msg);
     },
     *addUserList({ payload: params }, { call, put }) {
-      console.log(params);
-
       let { data } = yield call(service.addUserList, params);
-      if (data.success == true) message.success('添加成功');
+      if (data.success == true) message.success('导入成功');
       else message.success(data.msg);
     },
     *excel({ payload: params }, { call, put }) {

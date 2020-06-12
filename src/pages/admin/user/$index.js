@@ -23,6 +23,7 @@ import Link from 'umi/link';
 import ExcelUtil from '../../../util/excelUtil';
 const { TextArea, Search } = Input;
 const { Option } = Select;
+import moment from 'moment';
 
 const data = [];
 
@@ -186,11 +187,17 @@ class Index extends React.Component {
         title: '登陆时间',
         dataIndex: 'login_time',
         key: 'login_time',
+        render: text => {
+          return <span>{moment(text.login_time).format('YYYY-MM-DD HH:mm:ss')}</span>;
+        },
       },
       {
         title: '注册时间',
         dataIndex: 'reg_time',
         key: 'reg_time',
+        render: text => {
+          return <span>{moment(text.reg_time).format('YYYY-MM-DD HH:mm:ss')}</span>;
+        },
       },
       {
         title: '操作',

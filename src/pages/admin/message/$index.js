@@ -23,6 +23,7 @@ import Link from 'umi/link';
 const { TextArea, Search } = Input;
 const { Option } = Select;
 import ExcelUtil from '../../../util/excelUtil';
+import moment from 'moment';
 
 const data = [];
 
@@ -123,8 +124,6 @@ class Index extends React.Component {
   upExcel = e => {
     const { dispatch } = this.props;
     if (this.state.data.length != 0) {
-      console.log(this.state.data);
-
       dispatch({
         type: 'message/addMessageList',
         payload: this.state.data,
@@ -184,11 +183,17 @@ class Index extends React.Component {
         title: '创建时间',
         dataIndex: 'rel_time',
         key: 'rel_time',
+        render: text => {
+          return <span>{moment(text.rel_time).format('YYYY-MM-DD HH:mm:ss')}</span>;
+        },
       },
       {
         title: '更新时间',
         dataIndex: 'upd_time',
         key: 'upd_time',
+        render: text => {
+          return <span>{moment(text.upd_time).format('YYYY-MM-DD HH:mm:ss')}</span>;
+        },
       },
       {
         title: '操作',

@@ -1,5 +1,6 @@
 import * as service from '../services/admin_contest';
 import { message } from 'antd';
+import router from 'umi/router';
 export default {
   namespace: 'admin_contest',
 
@@ -25,8 +26,10 @@ export default {
     },
     *addContest({ payload: params }, { call, put }) {
       let { data } = yield call(service.addContest, params);
-      if (data.success == true) message.success('更新成功');
-      else message.success(data.msg);
+      if (data.success == true) {
+        message.success('添加成功');
+        router.push('/admin/contest/1');
+      } else message.success(data.msg);
     },
     *deleteContest({ payload: params }, { call, put }) {
       let { data } = yield call(service.deleteContest, params.obj);
