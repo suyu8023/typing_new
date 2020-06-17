@@ -42,7 +42,6 @@ export default {
     },
     *excel({ payload: params }, { call, put }) {
       let data = yield ExcelUtil.importExcel(params);
-      console.log(data);
     },
   },
 

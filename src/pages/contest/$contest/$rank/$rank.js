@@ -6,6 +6,7 @@ import { connect } from 'dva';
 import router from 'umi/router';
 import { Chart, Geom, Axis, Tooltip } from 'bizcharts';
 import Link from 'umi/link';
+import styles from './style.less';
 const { Search } = Input;
 
 class Index extends React.Component {
@@ -169,7 +170,7 @@ class Index extends React.Component {
         ),
       },
     ];
-    const { ContestRankNum, ContestRankList, loading } = this.props;
+    const { ContestRankNum, ContestRankList, loading, Contest } = this.props;
     let num = ContestRankNum;
     let reg = /^\d+$/;
     let path = location.pathname.split('/');
@@ -199,6 +200,9 @@ class Index extends React.Component {
           <Col span={24}>
             <Table
               className="responsive-table"
+              rowClassName={record => {
+                if (record.username == sessionStorage.getItem('username')) return styles.green;
+              }}
               pagination={false}
               loading={loading}
               columns={columns}

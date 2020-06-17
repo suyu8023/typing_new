@@ -42,7 +42,6 @@ class Index extends React.Component {
       message.loading('请登录', 0.5);
       router.push('/');
     }
-    // console.log(typeof localStorage.getItem('status'));
 
     if (localStorage.getItem('status') !== '1') {
       message.loading('请用管理员账号登录', 0.5);
@@ -126,8 +125,6 @@ class Index extends React.Component {
   upExcel = e => {
     const { dispatch } = this.props;
     if (this.state.data.length != 0) {
-      console.log(this.state.data);
-
       dispatch({
         type: 'user/addUserList',
         payload: this.state.data,

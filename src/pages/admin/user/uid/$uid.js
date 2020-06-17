@@ -18,7 +18,6 @@ class Index extends React.Component {
           type: 'admin_uid/updateUser',
           payload: values,
         });
-        // console.log('Received values of form: ', values);
       }
     });
   };

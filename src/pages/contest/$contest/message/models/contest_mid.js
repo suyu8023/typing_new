@@ -13,6 +13,13 @@ export default {
   effects: {
     *getMessage({ payload: params }, { call, put, select }) {
       const savedState = yield select(state => state.contest_mid.detail[params.mid]);
+      let { data } = yield call(service.getContest, params.cid);
+      yield put({
+        type: 'saveContest',
+        payload: {
+          data: data,
+        },
+      });
       if (!isStateExpired(savedState)) {
         yield put({
           type: 'saveMessage',
@@ -56,6 +63,15 @@ export default {
       };
       return { ...state, Message, Mesname };
     },
+    saveContest(
+      state,
+      {
+        payload: { data: result },
+      },
+    ) {
+      const Contest = result.data;
+      return { ...state, Contest };
+    },
   },
   subscriptions: {
     setup({ dispatch, history }) {
@@ -73,6 +89,7 @@ export default {
               type: 'getMessage',
               payload: {
                 mid: list[4],
+                cid: list[2],
               },
             });
           }

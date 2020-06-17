@@ -10,7 +10,6 @@ export default {
   effects: {
     *reg({ payload: params }, { call, put }) {
       const Username = yield call(service.username, params.username);
-      console.log(Username);
 
       if (Username.data.success === true) {
         message.error('用户名已存在');

@@ -1,7 +1,7 @@
 import React from 'react';
 import CSS from './mid.css';
 import { connect } from 'dva';
-import { Spin, message, Button } from 'antd';
+import { Spin, message, Button, Progress, Card, List } from 'antd';
 import router from 'umi/router';
 
 let hei = 0;
@@ -21,6 +21,8 @@ let ch1 = new Array(53).fill(0);
 let ch2 = new Array(53).fill(0);
 const A = /^[A-Z]+$/;
 const a = /^[a-z]+$/;
+let ll = 100;
+let timeId;
 function handleClick(e) {
   e.preventDefault();
 }
@@ -40,18 +42,20 @@ class List1 extends React.Component {
 
   barkTwice = () => {
     if (this.input == null) {
-      console.log('++++++');
     }
     this.input.focus();
   };
 
   countTime = () => {
-    qtime++;
+    const { Contest } = this.props;
+    ++qtime;
+    let qqtime = parseInt(Contest.times) * 60;
+
     if (document.getElementById('time') != null && document.getElementById('speed') != null) {
       document.getElementById('time').innerText =
-        (Array(2).join('0') + Math.floor(qtime / 60)).slice(-2) +
+        (Array(2).join('0') + Math.floor((qqtime - qtime) / 60)).slice(-2) +
         ':' +
-        (Array(2).join('0') + Math.floor(qtime % 60)).slice(-2);
+        (Array(2).join('0') + Math.floor((qqtime - qtime) % 60)).slice(-2);
       document.getElementById('speed').innerText =
         ((true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60))) * 60).toFixed(2) +
         'KPM';
@@ -64,7 +68,12 @@ class List1 extends React.Component {
           qtime +
           '},';
       }
-      setTimeout(this.countTime, 1000);
+      if (qtime == qqtime) {
+        clearTimeout(timeId);
+        this.props.handleSub();
+      } else {
+        timeId = setTimeout(this.countTime, 1000);
+      }
     }
   };
 
@@ -221,6 +230,7 @@ class ShowMessage extends React.Component {
     super(props);
     this.state = {
       activeIndex: 0,
+      ll: 100,
     };
   }
 
@@ -238,6 +248,12 @@ class ShowMessage extends React.Component {
         }
       },
     );
+  };
+
+  changeLL = () => {
+    this.setState({
+      ll: this.state.ll - 1,
+    });
   };
 
   handleSub = () => {
@@ -284,8 +300,6 @@ class ShowMessage extends React.Component {
       type: 'contest_mid/subContestPractice',
       payload: obj,
     });
-    // let list = location.pathname.split('/');
-    // router.push(`/${list[1]}/${list[2]}/rank/1`);
   };
 
   render() {
@@ -295,47 +309,78 @@ class ShowMessage extends React.Component {
     return (
       <div>
         <div>
-          <span style={{ fontSize: 30 }}>
-            时间:{' '}
-            <span id="time" style={{ color: 'red' }}>
-              00:00
+          {/* <Progress
+            strokeColor={{
+              '0%': '#f5222d',
+              '50%': '#108ee9',
+              '100%': '#87d068',
+            }}
+            percent={this.state.ll}
+            status="active"
+          /> */}
+          {/* <List horizontal style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <List.Item>
+              <List.Content>
+                <List.Header as="a">Daniel Louise</List.Header>
+              </List.Content>
+            </List.Item>
+            <List.Item>
+              <List.Content>
+                <List.Header as="a">Stevie Feliciano</List.Header>
+              </List.Content>
+            </List.Item>
+            <List.Item>
+              <List.Content>
+                <List.Header as="a">Elliot Fu</List.Header>
+              </List.Content>
+            </List.Item>
+          </List> */}
+          <div>
+            <span style={{ fontSize: 30, width: '14' }}>
+              时间:{' '}
+              <span id="time" style={{ color: 'red' }}>
+                {(
+                  Array(2).join('0') + Math.floor((parseInt(this.props.Contest.times) * 60) / 60)
+                ).slice(-2) +
+                  ':' +
+                  (
+                    Array(2).join('0') + Math.floor((parseInt(this.props.Contest.times) * 60) % 60)
+                  ).slice(-2)}
+              </span>
             </span>
-          </span>
-          <span style={{ fontSize: 30 }}>
-            {' '}
-            速度:<span id="speed">0KPM</span>
-          </span>
-          <span style={{ fontSize: 30 }}>
-            {' '}
-            正确率:<span id="correct_rate">0%</span>
-          </span>
-          <span style={{ fontSize: 30 }}>
-            {' '}
-            打字总数:<span id="num">0</span>
-          </span>
-          <span style={{ fontSize: 30 }}>
-            {' '}
-            正确字数:<span id="true_num">0</span>
-          </span>
-          <span style={{ fontSize: 30 }}>
-            {' '}
-            错误字数:<span id="wrong_num">0</span>
-          </span>
-          <span style={{ fontSize: 30 }}>
-            {' '}
-            退格字数:<span id="back_num">0</span>
-          </span>
-          <span style={{ float: 'right' }}>
-            <Button type="primary" onClick={this.handleSub}>
-              提交
-            </Button>
-          </span>
+            <span style={{ fontSize: 30 }}>
+              {' '}
+              速度:<span id="speed">0KPM</span>
+            </span>
+            <span style={{ fontSize: 30 }}>
+              {' '}
+              正确率:<span id="correct_rate">0%</span>
+            </span>
+            <span style={{ fontSize: 30 }}>
+              {' '}
+              打字总数:<span id="num">0</span>
+            </span>
+            <span style={{ fontSize: 30 }}>
+              {' '}
+              正确字数:<span id="true_num">0</span>
+            </span>
+            <span style={{ fontSize: 30 }}>
+              {' '}
+              错误字数:<span id="wrong_num">0</span>
+            </span>
+            <span style={{ fontSize: 30 }}>
+              {' '}
+              退格字数:<span id="back_num">0</span>
+            </span>
+          </div>
         </div>
 
         <div id="qw" style={{ height: 680, overflow: 'hidden' }}>
           {date.map((item, index) => {
             return (
               <List1
+                handleSub={this.handleSub}
+                {...this.props}
                 id="list"
                 key={index}
                 id={'qaq' + item.mid}
@@ -344,6 +389,7 @@ class ShowMessage extends React.Component {
                 in={input}
                 activeIndex={this.state.activeIndex}
                 bark={this.bark}
+                changeLL={this.changeLL}
                 ref={ref => (this.list[index] = ref)}
               />
             );
@@ -411,11 +457,12 @@ class Detail extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { Message, Mesname } = state.contest_mid;
+  const { Message, Mesname, Contest } = state.contest_mid;
   return {
     loading: state.loading.models.contest_mid,
     Message,
     Mesname,
+    Contest,
   };
 }
 

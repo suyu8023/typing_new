@@ -5,7 +5,6 @@ import Enum from '../enum';
 function importExcel(that, file, obj) {
   // 获取上传的文件对象
   const { files } = file.target;
-  console.log(files);
   if (
     files[0].type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
     files[0].type == 'application/vnd.ms-excel'

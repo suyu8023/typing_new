@@ -55,7 +55,7 @@ export default {
       },
     ) {
       const AllMessage = result.data;
-      console.log(AllMessage);
+
       return { ...state, AllMessage };
     },
     saveContestList(

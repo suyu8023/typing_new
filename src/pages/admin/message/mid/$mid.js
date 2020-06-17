@@ -18,7 +18,6 @@ class Index extends React.Component {
           type: 'admin_mid/updateMessage',
           payload: values,
         });
-        // console.log('Received values of form: ', values);
       }
     });
   };

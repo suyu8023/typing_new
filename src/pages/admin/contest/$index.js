@@ -107,8 +107,6 @@ class Index extends React.Component {
           payload: values,
         });
         this.handleCancel();
-        // router.push(location.pathname);
-        // console.log('Received values of form: ', values);
       }
     });
   };

@@ -9,3 +9,7 @@ export function getContestRankList(cid, page, limit) {
 export function getUserContestRankList(cid, page, limit, username) {
   return request(`../../../api/contest/rank/${cid}/${username}?page=${page}&limit=${limit}`);
 }
+
+export function getContest(cid) {
+  return request(`../../../api/contest/find/${cid}`);
+}

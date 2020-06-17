@@ -202,7 +202,7 @@ class Index extends React.Component {
     });
     let ch_data = [];
     let ch = [];
-    if (User) {
+    if (User && User.ch != undefined && User.ch != null) {
       ch = User.ch.split(',').map(Number);
       ch.forEach((item, index) => {
         if (index < 26) {

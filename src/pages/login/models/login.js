@@ -9,9 +9,6 @@ export default {
   effects: {
     *login({ payload: params }, { call, put }) {
       const User = yield call(service.login, params);
-      // const Time = yield call(service.time);
-      // console.log(Time);
-      console.log(User);
 
       if (User.data.success === true) {
         localStorage.setItem('status', User.data.data.status);
@@ -37,7 +34,6 @@ export default {
         });
         message.error('账号或密码错误');
       }
-      console.log(sessionStorage);
     },
   },
 

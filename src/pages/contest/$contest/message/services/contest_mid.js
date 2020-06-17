@@ -7,7 +7,6 @@ export function getMessage(mid) {
 }
 
 export function subContestPractice(params) {
-  console.log(JSON.stringify(params));
   return request(`../../../api/contest/status/create`, {
     method: 'POST',
     headers: {
@@ -18,7 +17,6 @@ export function subContestPractice(params) {
 }
 
 export function subCh(params) {
-  console.log(JSON.stringify(params));
   return request(`../../../api/user/update`, {
     method: 'POST',
     headers: {
@@ -26,4 +24,8 @@ export function subCh(params) {
     },
     body: JSON.stringify(params),
   });
+}
+
+export function getContest(cid) {
+  return request(`../../../api/contest/find/${cid}`);
 }

@@ -5,6 +5,7 @@ import { Table, Divider, Tag, Pagination, message, Input, Row, Col } from 'antd'
 import { connect } from 'dva';
 import router from 'umi/router';
 import Link from 'umi/link';
+import moment from 'moment';
 const { Search } = Input;
 
 const columns = [
@@ -35,11 +36,17 @@ const columns = [
     title: '创建时间',
     dataIndex: 'rel_time',
     key: 'rel_time',
+    render: text => {
+      return <span>{moment(text.rel_time).format('YYYY-MM-DD HH:mm:ss')}</span>;
+    },
   },
   {
     title: '更新时间',
     dataIndex: 'upd_time',
     key: 'upd_time',
+    render: text => {
+      return <span>{moment(text.upd_time).format('YYYY-MM-DD HH:mm:ss')}</span>;
+    },
   },
 ];
 

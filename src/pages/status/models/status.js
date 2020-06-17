@@ -32,7 +32,6 @@ export default {
         payload: { data: result },
       },
     ) {
-      console.log(result);
       const StatusList = result.data.rows;
       const StatusNum = result.data.count;
       return { ...state, StatusList, StatusNum };

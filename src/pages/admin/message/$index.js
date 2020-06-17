@@ -72,7 +72,7 @@ class Index extends React.Component {
         page: location.pathname.split('/')[3],
       },
     });
-    router.push(location.pathname);
+    // router.push(location.pathname);
   };
 
   showModal = () => {
@@ -105,7 +105,6 @@ class Index extends React.Component {
         });
         this.handleCancel();
         router.push(location.pathname);
-        // console.log('Received values of form: ', values);
       }
     });
   };

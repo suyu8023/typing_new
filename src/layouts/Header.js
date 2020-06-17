@@ -24,7 +24,6 @@ class Index extends React.Component {
         style={{ height: '100%' }}
       >
         <Header className={HeaderCss.Header}>
-          <div className={HeaderCss.logo} />
           {!location.pathname.includes('admin') ? (
             <Menu
               theme="dark"

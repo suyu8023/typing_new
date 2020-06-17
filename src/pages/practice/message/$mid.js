@@ -23,6 +23,7 @@ let ch1 = new Array(53).fill(0);
 let ch2 = new Array(53).fill(0);
 const A = /^[A-Z]+$/;
 const a = /^[a-z]+$/;
+let timeId;
 function handleClick(e) {
   e.preventDefault();
 }
@@ -42,7 +43,6 @@ class List1 extends React.Component {
 
   barkTwice = () => {
     if (this.input == null) {
-      console.log('++++++');
     }
     this.input.focus();
   };
@@ -66,7 +66,7 @@ class List1 extends React.Component {
           qtime +
           '},';
       }
-      setTimeout(this.countTime, 1000);
+      timeId = setTimeout(this.countTime, 1000);
     }
   };
 
@@ -109,6 +109,7 @@ class List1 extends React.Component {
         );
         ch2 = JSON.parse(JSON.stringify(ch));
       }
+      console.log(ch2);
     }
     let i = parseInt(e.target.id.slice(4));
     if (i >= 3 && flag != i) {

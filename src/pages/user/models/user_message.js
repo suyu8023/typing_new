@@ -46,7 +46,6 @@ export default {
     },
     *updatePassword({ payload: params }, { call, put }) {
       const result = yield call(service.judgeUser, params.username, params.old_password);
-      console.log(result.data.success);
       if (result.data.success == true) {
         let obj = {
           password: params.password1,

@@ -23,7 +23,6 @@ class Index extends React.Component {
           payload: values,
         });
         router.push(location.pathname);
-        // console.log('Received values of form: ', values);
       }
     });
   };
@@ -53,7 +52,6 @@ class Index extends React.Component {
       },
     };
     const { Contest, AllMessage } = this.props;
-    console.log(AllMessage);
 
     return (
       <div>
