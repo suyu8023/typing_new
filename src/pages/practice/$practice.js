@@ -57,12 +57,12 @@ class Index extends React.Component {
     super(props);
   }
 
-  componentWillMount() {
-    if (sessionStorage.getItem('username') === null) {
-      message.loading('请登录', 0.5);
-      router.push('/');
-    }
-  }
+  // componentWillMount() {
+  //   if (sessionStorage.getItem('username') === null) {
+  //     message.loading('请登录', 0.5);
+  //     router.push('/');
+  //   }
+  // }
 
   onChange = e => {
     const { location } = this.props;

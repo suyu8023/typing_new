@@ -363,12 +363,12 @@ class Detail extends React.Component {
     };
   }
 
-  componentWillMount() {
-    if (sessionStorage.getItem('username') === null) {
-      message.loading('请登录', 0.5);
-      router.push('/');
-    }
-  }
+  // componentWillMount() {
+  //   if (sessionStorage.getItem('username') === null) {
+  //     message.loading('请登录', 0.5);
+  //     router.push('/');
+  //   }
+  // }
 
   render() {
     const { loading } = this.props;
