@@ -26,7 +26,7 @@ class Index extends React.Component {
   }
 
   showModal = item => {
-    if (item === null || item.length === 0) {
+    if (item === null || item.length === 0 || item == '[]') {
       item = [{}];
       this.setState({
         visible: true,

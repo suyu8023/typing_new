@@ -55,16 +55,20 @@ class List1 extends React.Component {
         ':' +
         (Array(2).join('0') + Math.floor(qtime % 60)).slice(-2);
       document.getElementById('speed').innerText =
-        ((true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60))) * 60).toFixed(2) +
-        'KPM';
+        Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60) == 0
+          ? 0
+          : ((true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60))) * 60).toFixed(2) +
+            'KPM';
       if (qtime % 5 == 0) {
         line_data =
-          line_data +
-          '{y:' +
-          ((true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60))) * 60).toFixed(2) +
-          ',x:' +
-          qtime +
-          '},';
+          line_data + '{y:' + (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60)) == 0
+            ? 0
+            : ((true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60))) * 60).toFixed(
+                2,
+              ) +
+              ',x:' +
+              qtime +
+              '},';
       }
       timeId = setTimeout(this.countTime, 1000);
     }
@@ -154,7 +158,9 @@ class List1 extends React.Component {
       document.getElementById('wrong_num').innerText = wrong_num + wrong_num1;
       document.getElementById('back_num').innerText = back_num;
       document.getElementById('correct_rate').innerText =
-        (((true_num + true_num1) / (num + true_num1 + wrong_num1)) * 100).toFixed(2) + '%';
+        (num + true_num1 + wrong_num1 == 0
+          ? 0
+          : (((true_num + true_num1) / (num + true_num1 + wrong_num1)) * 100).toFixed(2)) + '%';
       for (let i = 0; i < 53; i++) {
         ch[i] += ch1[i];
       }
@@ -173,7 +179,7 @@ class List1 extends React.Component {
       document.getElementById('wrong_num').innerText = wrong_num + wrong_num1;
       document.getElementById('back_num').innerText = back_num;
       document.getElementById('correct_rate').innerText =
-        (((true_num + true_num1) / num) * 100).toFixed(2) + '%';
+        (num == 0 ? 0 : (((true_num + true_num1) / num) * 100).toFixed(2)) + '%';
       ch = JSON.parse(JSON.stringify(ch2));
       for (let i = 0; i < 53; i++) {
         ch[i] += ch1[i];

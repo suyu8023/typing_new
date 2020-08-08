@@ -57,16 +57,20 @@ class List1 extends React.Component {
         ':' +
         (Array(2).join('0') + Math.floor((qqtime - qtime) % 60)).slice(-2);
       document.getElementById('speed').innerText =
-        ((true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60))) * 60).toFixed(2) +
-        'KPM';
+        Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60) == 0
+          ? 0
+          : ((true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60))) * 60).toFixed(2) +
+            'KPM';
       if (qtime % 5 == 0) {
         line_data =
-          line_data +
-          '{y:' +
-          ((true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60))) * 60).toFixed(2) +
-          ',x:' +
-          qtime +
-          '},';
+          line_data + '{y:' + (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60)) == 0
+            ? 0
+            : ((true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60))) * 60).toFixed(
+                2,
+              ) +
+              ',x:' +
+              qtime +
+              '},';
       }
       if (qtime == qqtime) {
         clearTimeout(timeId);
