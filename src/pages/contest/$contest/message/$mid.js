@@ -63,14 +63,16 @@ class List1 extends React.Component {
             'KPM';
       if (qtime % 5 == 0) {
         line_data =
-          line_data + '{y:' + (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60)) == 0
+          line_data +
+          '{y:' +
+          (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60) == 0
             ? 0
             : ((true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60))) * 60).toFixed(
                 2,
-              ) +
-              ',x:' +
-              qtime +
-              '},';
+              )) +
+          ',x:' +
+          qtime +
+          '},';
       }
       if (qtime == qqtime) {
         clearTimeout(timeId);
@@ -261,7 +263,10 @@ class ShowMessage extends React.Component {
   };
 
   handleSub = () => {
-    let time = document.getElementById('time').innerText;
+    let time =
+      (Array(2).join('0') + Math.floor((parseInt(this.props.Contest.times) * 60) / 60)).slice(-2) +
+      ':' +
+      (Array(2).join('0') + Math.floor((parseInt(this.props.Contest.times) * 60) % 60)).slice(-2);
     let speed = document.getElementById('speed').innerText;
     let num = document.getElementById('num').innerText;
     let true_num = document.getElementById('true_num').innerText;

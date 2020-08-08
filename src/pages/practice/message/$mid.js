@@ -61,11 +61,11 @@ class List1 extends React.Component {
             'KPM';
       if (qtime % 5 == 0) {
         line_data =
-          line_data + '{y:' + (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60)) == 0
+          line_data + '{y:' + ((Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60)) == 0
             ? 0
             : ((true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60))) * 60).toFixed(
                 2,
-              ) +
+              )) +
               ',x:' +
               qtime +
               '},';
