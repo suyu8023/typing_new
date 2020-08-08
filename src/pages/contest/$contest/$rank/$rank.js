@@ -18,12 +18,12 @@ class Index extends React.Component {
     };
   }
 
-  componentWillMount() {
-    if (sessionStorage.getItem('username') === null) {
-      message.loading('请登录', 0.5);
-      router.push('/');
-    }
-  }
+  // componentWillMount() {
+  //   if (sessionStorage.getItem('username') === null) {
+  //     message.loading('请登录', 0.5);
+  //     router.push('/');
+  //   }
+  // }
 
   showModal = item => {
     if (item === null || item.length === 0 || item == '[]') {
