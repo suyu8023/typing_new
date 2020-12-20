@@ -269,7 +269,10 @@ class ShowMessage extends React.Component {
   };
 
   handleSub = () => {
-    let time = document.getElementById('time').innerText;
+    let time =
+      (Array(2).join('0') + Math.floor((parseInt(this.props.Contest.times) * 60) / 60)).slice(-2) +
+      ':' +
+      (Array(2).join('0') + Math.floor((parseInt(this.props.Contest.times) * 60) % 60)).slice(-2);
     let speed = document.getElementById('speed').innerText;
     let num = document.getElementById('num').innerText;
     let true_num = document.getElementById('true_num').innerText;
