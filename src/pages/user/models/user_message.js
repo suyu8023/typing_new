@@ -19,8 +19,9 @@ export default {
         });
       }
     },
-    *getUser({ payload: params }, { call, put }) {
-      const { data } = yield call(service.user, params.uid);
+    *getUser({ payload: params }, { call, put, select }) {
+      const { session } = yield select(state => state.header);
+      const { data } = yield call(service.user, session.data.uid);
       if (data.success === true) {
         yield put({
           type: 'saveUser',

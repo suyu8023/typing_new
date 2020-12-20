@@ -70,7 +70,7 @@ class Index extends React.Component {
       if (err) {
         return;
       }
-      values.uid = localStorage.getItem('uid');
+      values.uid = this.props.session.data.uid;
       dispatch({
         type: 'user_message/updateUser',
         payload: values,
@@ -104,7 +104,7 @@ class Index extends React.Component {
         message.error('两次密码输入不一样');
       } else {
         values.username = localStorage.getItem('username');
-        values.uid = localStorage.getItem('uid');
+        values.uid = this.props.session.data.uid;
         dispatch({
           type: 'user_message/updatePassword',
           payload: values,
@@ -135,7 +135,7 @@ class Index extends React.Component {
       if (err) {
         return;
       }
-      values.uid = localStorage.getItem('uid');
+      values.uid = this.props.session.data.uid;
       dispatch({
         type: 'user_message/updateEmail',
         payload: values,
@@ -455,10 +455,12 @@ class Index extends React.Component {
 }
 function mapStateToProps(state) {
   const { UserRecord, User } = state.user_message;
+  const { session } = state.header
   return {
     loading: state.loading.models.user_message,
     UserRecord,
     User,
+    session
   };
 }
 

@@ -27,18 +27,18 @@ export default {
     *deleteUser({ payload: params }, { call, put }) {
       let { data } = yield call(service.deleteUser, params.obj);
       if (data.success == true) message.success('删除成功');
-      else message.success(data.msg);
+      else message.error(data.msg);
     },
 
     *addUser({ payload: params }, { call, put }) {
       let { data } = yield call(service.addUser, params);
       if (data.success == true) message.success('添加成功');
-      else message.success(data.msg);
+      else message.error(data.msg);
     },
     *addUserList({ payload: params }, { call, put }) {
       let { data } = yield call(service.addUserList, params);
       if (data.success == true) message.success('导入成功');
-      else message.success(data.msg);
+      else message.error(data.msg);
     },
     *excel({ payload: params }, { call, put }) {
       let data = yield ExcelUtil.importExcel(params);

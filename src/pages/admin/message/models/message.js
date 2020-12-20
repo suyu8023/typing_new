@@ -27,7 +27,7 @@ export default {
       let { data } = yield call(service.deleteMessage, params.obj);
       if (data.success == true) {
         message.success('删除成功');
-      } else message.success(data.msg);
+      } else message.error(data.msg);
       yield put({
         type: 'getMessageList',
         payload: {
@@ -41,13 +41,13 @@ export default {
       let { data } = yield call(service.addMessage, params);
       if (data.success == true) {
         message.success('添加成功');
-      } else message.success(data.msg);
+      } else message.error(data.msg);
     },
     *addMessageList({ payload: params }, { call, put }) {
       let { data } = yield call(service.addMessageList, params);
       if (data.success == true) {
         message.success('导入成功');
-      } else message.success(data.msg);
+      } else message.error(data.msg);
     },
   },
 

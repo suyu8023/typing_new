@@ -28,12 +28,12 @@ export default {
     *updateMessage({ payload: params }, { call, put }) {
       let { data } = yield call(service.updateMessage, params);
       if (data.success == true) message.success('更新成功');
-      else message.success(data.msg);
+      else message.error(data.msg);
     },
     *deleteMessage({ payload: params }, { call, put }) {
       let { data } = yield call(service.deleteMessage, params);
       if (data.success == true) message.success('更新成功');
-      else message.success(data.msg);
+      else message.error(data.msg);
     },
   },
 

@@ -58,17 +58,18 @@ class List1 extends React.Component {
         Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60) == 0
           ? 0
           : ((true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60))) * 60).toFixed(2) +
-            'KPM';
+          'KPM';
       if (qtime % 5 == 0) {
         line_data =
-          line_data + '{y:' + (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60)) == 0
+          line_data +
+          '{y:' + ((Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60)) == 0
             ? 0
             : ((true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60))) * 60).toFixed(
-                2,
-              ) +
-              ',x:' +
-              qtime +
-              '},';
+              2,
+            )) +
+          ',x:' +
+          qtime +
+          '},';
       }
       timeId = setTimeout(this.countTime, 1000);
     }
@@ -270,7 +271,7 @@ class ShowMessage extends React.Component {
     }
     let obj = {
       status: {
-        uid: localStorage.getItem('uid'),
+        uid: this.props.session.data.uid,
         mid: this.props.location.pathname.split('/')[3],
         username: localStorage.getItem('username'),
         nickname: localStorage.getItem('nickname'),
@@ -284,7 +285,7 @@ class ShowMessage extends React.Component {
         backnum: back_num,
       },
       ch: {
-        uid: localStorage.getItem('uid'),
+        uid: this.props.session.data.uid,
         ch: ch.join(','),
       },
     };
@@ -350,7 +351,7 @@ class ShowMessage extends React.Component {
                 activeIndex={this.state.activeIndex}
                 bark={this.bark}
                 ref={ref => (this.list[index] = ref)}
-                // countTime={this.countTime}
+              // countTime={this.countTime}
               />
             );
           })}
@@ -420,10 +421,12 @@ class Detail extends React.Component {
 
 function mapStateToProps(state) {
   const { Message, Mename } = state.mid;
+  const { session } = state.header
   return {
     loading: state.loading.models.mid,
     Message,
     Mename,
+    session
   };
 }
 

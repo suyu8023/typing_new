@@ -29,12 +29,12 @@ export default {
       if (data.success == true) {
         message.success('添加成功');
         router.push('/admin/contest/1');
-      } else message.success(data.msg);
+      } else message.error(data.msg);
     },
     *deleteContest({ payload: params }, { call, put }) {
       let { data } = yield call(service.deleteContest, params.obj);
       if (data.success == true) message.success('删除成功');
-      else message.success(data.msg);
+      else message.error(data.msg);
     },
     *getAllMessage(_, { call, put }) {
       let { data } = yield call(service.getAllMessage);

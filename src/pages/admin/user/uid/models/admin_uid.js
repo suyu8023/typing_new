@@ -17,7 +17,7 @@ export default {
     *updateUser({ payload: params }, { call, put }) {
       let { data } = yield call(service.updateUser, params);
       if (data.success == true) message.success('更新成功');
-      else message.success(data.msg);
+      else message.error(data.msg);
     },
   },
 

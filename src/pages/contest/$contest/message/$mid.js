@@ -23,6 +23,7 @@ const A = /^[A-Z]+$/;
 const a = /^[a-z]+$/;
 let ll = 100;
 let timeId;
+
 function handleClick(e) {
   e.preventDefault();
 }
@@ -60,17 +61,17 @@ class List1 extends React.Component {
         Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60) == 0
           ? 0
           : ((true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60))) * 60).toFixed(2) +
-            'KPM';
+          'KPM';
       if (qtime % 5 == 0) {
         line_data =
-          line_data + '{y:' + (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60)) == 0
+          line_data + '{y:' + ((Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60)) == 0
             ? 0
             : ((true_num2 / (Math.floor(qtime / 60) * 60 + Math.floor(qtime % 60))) * 60).toFixed(
-                2,
-              ) +
-              ',x:' +
-              qtime +
-              '},';
+              2,
+            )) +
+          ',x:' +
+          qtime +
+          '},';
       }
       if (qtime == qqtime) {
         clearTimeout(timeId);
@@ -203,14 +204,21 @@ class List1 extends React.Component {
     return (
       <div className={CSS.read} id={'qaq' + index}>
         <div className={CSS.write} id={'show' + index}>
+          {' '}
           {this.state.value.map(item => {
             return (
-              <span key={item.index} style={{ backgroundColor: item.color }}>
-                {item.value}
+              <span
+                key={item.index}
+                style={{
+                  backgroundColor: item.color,
+                }}
+              >
+                {' '}
+                {item.value}{' '}
               </span>
             );
-          })}
-        </div>
+          })}{' '}
+        </div>{' '}
         <input
           onPaste={handleClick}
           onContextMenu={handleClick}
@@ -223,7 +231,7 @@ class List1 extends React.Component {
           onKeyDown={this.onkeyDown}
           {...disable}
           ref={ref => (this.input = ref)}
-        />
+        />{' '}
       </div>
     );
   }
@@ -281,7 +289,7 @@ class ShowMessage extends React.Component {
     let obj = {
       status: {
         cid: this.props.location.pathname.split('/')[2],
-        uid: localStorage.getItem('uid'),
+        uid: this.props.session.data.uid,
         mid: this.props.location.pathname.split('/')[4],
         username: localStorage.getItem('username'),
         nickname: localStorage.getItem('nickname'),
@@ -295,7 +303,7 @@ class ShowMessage extends React.Component {
         backnum: back_num,
       },
       ch: {
-        uid: localStorage.getItem('uid'),
+        uid: this.props.session.data.uid,
         ch: ch.join(','),
       },
     };
@@ -313,73 +321,115 @@ class ShowMessage extends React.Component {
     return (
       <div>
         <div>
+          {' '}
           {/* <Progress
-            strokeColor={{
-              '0%': '#f5222d',
-              '50%': '#108ee9',
-              '100%': '#87d068',
-            }}
-            percent={this.state.ll}
-            status="active"
-          /> */}
+                    strokeColor={{
+                      '0%': '#f5222d',
+                      '50%': '#108ee9',
+                      '100%': '#87d068',
+                    }}
+                    percent={this.state.ll}
+                    status="active"
+                  /> */}{' '}
           {/* <List horizontal style={{ display: 'flex', justifyContent: 'space-around' }}>
-            <List.Item>
-              <List.Content>
-                <List.Header as="a">Daniel Louise</List.Header>
-              </List.Content>
-            </List.Item>
-            <List.Item>
-              <List.Content>
-                <List.Header as="a">Stevie Feliciano</List.Header>
-              </List.Content>
-            </List.Item>
-            <List.Item>
-              <List.Content>
-                <List.Header as="a">Elliot Fu</List.Header>
-              </List.Content>
-            </List.Item>
-          </List> */}
+                    <List.Item>
+                      <List.Content>
+                        <List.Header as="a">Daniel Louise</List.Header>
+                      </List.Content>
+                    </List.Item>
+                    <List.Item>
+                      <List.Content>
+                        <List.Header as="a">Stevie Feliciano</List.Header>
+                      </List.Content>
+                    </List.Item>
+                    <List.Item>
+                      <List.Content>
+                        <List.Header as="a">Elliot Fu</List.Header>
+                      </List.Content>
+                    </List.Item>
+                  </List> */}{' '}
           <div>
-            <span style={{ fontSize: 30, width: '14' }}>
+            <span
+              style={{
+                fontSize: 30,
+                width: '14',
+              }}
+            >
               时间:{' '}
-              <span id="time" style={{ color: 'red' }}>
+              <span
+                id="time"
+                style={{
+                  color: 'red',
+                }}
+              >
+                {' '}
                 {(
                   Array(2).join('0') + Math.floor((parseInt(this.props.Contest.times) * 60) / 60)
                 ).slice(-2) +
                   ':' +
                   (
                     Array(2).join('0') + Math.floor((parseInt(this.props.Contest.times) * 60) % 60)
-                  ).slice(-2)}
-              </span>
-            </span>
-            <span style={{ fontSize: 30 }}>
+                  ).slice(-2)}{' '}
+              </span>{' '}
+            </span>{' '}
+            <span
+              style={{
+                fontSize: 30,
+              }}
+            >
               {' '}
-              速度:<span id="speed">0KPM</span>
-            </span>
-            <span style={{ fontSize: 30 }}>
+              速度: <span id="speed"> 0 KPM </span>{' '}
+            </span>{' '}
+            <span
+              style={{
+                fontSize: 30,
+              }}
+            >
               {' '}
-              正确率:<span id="correct_rate">0%</span>
-            </span>
-            <span style={{ fontSize: 30 }}>
+              正确率: <span id="correct_rate"> 0 % </span>{' '}
+            </span>{' '}
+            <span
+              style={{
+                fontSize: 30,
+              }}
+            >
               {' '}
-              打字总数:<span id="num">0</span>
-            </span>
-            <span style={{ fontSize: 30 }}>
+              打字总数: <span id="num"> 0 </span>{' '}
+            </span>{' '}
+            <span
+              style={{
+                fontSize: 30,
+              }}
+            >
               {' '}
-              正确字数:<span id="true_num">0</span>
-            </span>
-            <span style={{ fontSize: 30 }}>
+              正确字数: <span id="true_num"> 0 </span>{' '}
+            </span>{' '}
+            <span
+              style={{
+                fontSize: 30,
+              }}
+            >
               {' '}
-              错误字数:<span id="wrong_num">0</span>
-            </span>
-            <span style={{ fontSize: 30 }}>
+              错误字数: <span id="wrong_num"> 0 </span>{' '}
+            </span>{' '}
+            <span
+              style={{
+                fontSize: 30,
+              }}
+            >
               {' '}
-              退格字数:<span id="back_num">0</span>
-            </span>
-          </div>
+              退格字数: <span id="back_num"> 0 </span>{' '}
+            </span>{' '}
+          </div>{' '}
         </div>
-
-        <div id="qw" style={{ height: 680, overflow: 'hidden' }}>
+        <div
+          id="qw"
+          style={{
+            height: 680,
+            overflow: 'hidden',
+          }}
+        >
+          {' '}
           {date.map((item, index) => {
             return (
               <List1
@@ -397,8 +447,8 @@ class ShowMessage extends React.Component {
                 ref={ref => (this.list[index] = ref)}
               />
             );
-          })}
-        </div>
+          })}{' '}
+        </div>{' '}
       </div>
     );
   }
@@ -456,17 +506,19 @@ class Detail extends React.Component {
         date3.push(date2);
       }
     }
-    return <div>{loading ? <Spin /> : <ShowMessage {...this.props} date={date3} />}</div>;
+    return <div> {loading ? <Spin /> : <ShowMessage {...this.props} date={date3} />}</div>;
   }
 }
 
 function mapStateToProps(state) {
   const { Message, Mesname, Contest } = state.contest_mid;
+  const { session } = state.header;
   return {
     loading: state.loading.models.contest_mid,
     Message,
     Mesname,
     Contest,
+    session,
   };
 }
 
